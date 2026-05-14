@@ -55,7 +55,7 @@ export async function sendContactNotification({
   await resend.emails.send({
     from: FROM,
     to: tutorEmail,
-    reply_to: studentEmail,
+    replyTo: studentEmail,
     subject: `New tutoring request — ${courseCode}`,
     text: lines,
   });
