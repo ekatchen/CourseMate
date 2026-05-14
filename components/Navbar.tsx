@@ -14,13 +14,11 @@ export default function Navbar() {
 
   useEffect(() => {
     const supabase = createSupabaseBrowser();
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_, session) => {
+    supabase.auth.getUser().then((res) => setUser(res.data.user));
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
-    return () => subscription.unsubscribe();
+    return () => authListener.subscription.unsubscribe();
   }, []);
 
   const links = [
