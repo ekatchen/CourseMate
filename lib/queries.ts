@@ -317,10 +317,10 @@ export async function submitContactRequest(
       .select("email")
       .eq("id", tutorIdValue)
       .single()
-      .then(({ data }) => {
-        if (data?.email) {
+      .then((result: { data: { email: string } | null }) => {
+        if (result.data?.email) {
           sendContactNotification({
-            tutorEmail: data.email,
+            tutorEmail: result.data.email,
             tutorName: payload.tutor_name,
             studentName: payload.student_name,
             studentEmail: payload.student_email,

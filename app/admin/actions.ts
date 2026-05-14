@@ -23,11 +23,11 @@ export async function handleApproveTutor(formData: FormData) {
       .select("email, display_name")
       .eq("id", id)
       .single()
-      .then(({ data }) => {
-        if (data?.email) {
+      .then((result: { data: { email: string; display_name: string } | null }) => {
+        if (result.data?.email) {
           sendApprovalNotification({
-            tutorEmail: data.email,
-            tutorName: data.display_name,
+            tutorEmail: result.data.email,
+            tutorName: result.data.display_name,
           }).catch(console.error);
         }
       });
