@@ -16,8 +16,7 @@ export default function HomePage() {
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     const trimmed = query.trim();
-    if (trimmed) router.push(`/tutors?course=${encodeURIComponent(trimmed)}`);
-    else router.push("/tutors");
+    router.push(trimmed ? `/tutors?course=${encodeURIComponent(trimmed)}` : "/tutors");
   }
 
   return (
@@ -26,7 +25,7 @@ export default function HomePage() {
       <section className="bg-white border-b border-gray-100">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">
-            Peer tutoring &middot; Western University
+            Course-specific peer tutoring
           </p>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
             Find a tutor for your exact course.
@@ -41,17 +40,11 @@ export default function HomePage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Course code — e.g. Calc 1000, CS 1026"
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:border-transparent"
-              style={{ focusRingColor: "#4F2683" } as React.CSSProperties}
-              onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
-              onBlur={e => e.currentTarget.style.boxShadow = "none"}
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent"
             />
             <button
               type="submit"
-              className="text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap"
-              style={{ backgroundColor: "#4F2683" }}
-              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#3D1A6E")}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#4F2683")}
+              className="text-white bg-brand-700 hover:bg-brand-800 px-5 py-3 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap"
             >
               Find a Tutor
             </button>
@@ -62,7 +55,7 @@ export default function HomePage() {
               <button
                 key={c}
                 onClick={() => router.push(`/tutors?course=${encodeURIComponent(c)}`)}
-                className="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-md transition-colors hover:bg-gray-200"
+                className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-500 px-3 py-1.5 rounded-md transition-colors"
               >
                 {c}
               </button>
@@ -79,18 +72,16 @@ export default function HomePage() {
             Find someone who already took your course.
           </h2>
           <p className="text-sm text-gray-500 leading-relaxed">
-            Search by exact course code and find a tutor who knows your professor,
-            the assignments, and what actually shows up on the exam.
+            Search by course code and find a tutor familiar with the structure, pace, and expectations of the class.
           </p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">For tutors</p>
           <h2 className="text-base font-bold text-gray-900 mb-2">
-            Get paid to tutor courses you already passed.
+            Tutor courses you already know well.
           </h2>
           <p className="text-sm text-gray-500 leading-relaxed">
-            List the courses you did well in, set your rate, and let students come to you.
-            No marketing required.
+            Create a profile, list the courses you can tutor, set your rate, and receive student requests.
           </p>
         </div>
       </section>
@@ -98,7 +89,7 @@ export default function HomePage() {
       {/* How it works */}
       <section className="bg-white border-y border-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 text-center mb-10">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400 text-center mb-10">
             How it works
           </h2>
           <div className="grid sm:grid-cols-3 gap-8">
@@ -106,23 +97,21 @@ export default function HomePage() {
               {
                 step: "01",
                 title: "Search by course code",
-                desc: "Type in your exact course — CS 1026, Econ 1021, Calc 1000 — and see tutors who already passed it.",
+                desc: "Type in your exact course — CS 1026, Econ 1021, Calc 1000 — and see tutors who have taken it.",
               },
               {
                 step: "02",
                 title: "Compare and choose",
-                desc: "View rates, grades earned, reviews, and teaching styles before reaching out.",
+                desc: "View rates, grades earned, and reviews before reaching out.",
               },
               {
                 step: "03",
                 title: "Contact directly",
-                desc: "Message your tutor to set up a session. No platform fees, no scheduling system.",
+                desc: "Message your tutor to set up a session. No platform fees or scheduling system.",
               },
             ].map((item) => (
               <div key={item.step}>
-                <p className="text-2xl font-bold mb-3" style={{ color: "#4F2683", opacity: 0.25 }}>
-                  {item.step}
-                </p>
+                <p className="text-2xl font-bold text-brand-700 opacity-25 mb-3">{item.step}</p>
                 <h3 className="font-semibold text-gray-900 mb-2 text-sm">{item.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
               </div>
@@ -136,15 +125,12 @@ export default function HomePage() {
         <div>
           <h2 className="text-base font-bold text-gray-900">Did well in a course?</h2>
           <p className="text-sm text-gray-500 mt-1">
-            Apply to tutor it. Set your own rate and start getting students.
+            Apply to tutor it. Set your own rate and start receiving student requests.
           </p>
         </div>
         <Link
           href="/become-a-tutor"
-          className="text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors whitespace-nowrap"
-          style={{ backgroundColor: "#4F2683" }}
-          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "#3D1A6E")}
-          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "#4F2683")}
+          className="text-white bg-brand-700 hover:bg-brand-800 px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors whitespace-nowrap"
         >
           Become a Tutor
         </Link>

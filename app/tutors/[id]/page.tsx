@@ -22,7 +22,7 @@ export default async function TutorProfilePage({ params }: Props) {
       {/* Profile header */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8">
         <div className="flex items-start gap-5">
-          <div className="relative w-16 h-16 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
+          <div className="relative w-16 h-16 rounded-full overflow-hidden bg-brand-50 flex-shrink-0">
             <Image src={tutor.photoUrl} alt={tutor.name} fill className="object-cover" />
           </div>
           <div className="flex-1 min-w-0">
@@ -53,16 +53,13 @@ export default async function TutorProfilePage({ params }: Props) {
                 <p className="font-semibold text-gray-900 text-sm">{course.code}</p>
                 <p className="text-xs text-gray-400 mt-0.5">{course.name}</p>
                 {course.grade && (
-                  <span
-                    className="inline-block mt-1.5 text-xs font-medium px-2 py-0.5 rounded"
-                    style={{ backgroundColor: "#F4F0FA", color: "#5C2D91" }}
-                  >
+                  <span className="inline-block mt-1.5 text-xs font-medium px-2 py-0.5 rounded bg-brand-50 text-brand-700">
                     Grade: {course.grade}
                   </span>
                 )}
               </div>
               <div className="text-right flex-shrink-0">
-                <p className="text-lg font-bold" style={{ color: "#4F2683" }}>${course.ratePerHour}</p>
+                <p className="text-lg font-bold text-brand-700">${course.ratePerHour}</p>
                 <p className="text-xs text-gray-400">/ hr</p>
               </div>
             </div>
@@ -71,10 +68,7 @@ export default async function TutorProfilePage({ params }: Props) {
       </div>
 
       {/* Contact */}
-      <div
-        className="mt-5 rounded-xl border p-6 text-center"
-        style={{ backgroundColor: "#F4F0FA", borderColor: "#E5DBEF" }}
-      >
+      <div className="mt-5 rounded-xl border border-brand-100 bg-brand-50 p-6 text-center">
         <h2 className="text-base font-bold text-gray-900">
           Want to book a session with {tutor.name.split(" ")[0]}?
         </h2>
@@ -83,7 +77,7 @@ export default async function TutorProfilePage({ params }: Props) {
         </p>
         <a
           href={`mailto:tutor+${tutor.id}@coursemate.ca?subject=Tutoring inquiry`}
-          className="inline-block text-white px-6 py-2.5 rounded-lg font-semibold text-sm transition-colors bg-brand-700 hover:bg-brand-800"
+          className="inline-block text-white bg-brand-700 hover:bg-brand-800 px-6 py-2.5 rounded-lg font-semibold text-sm transition-colors"
         >
           Contact {tutor.name.split(" ")[0]}
         </a>
@@ -103,10 +97,7 @@ export default async function TutorProfilePage({ params }: Props) {
               <div key={review.id} className="bg-white rounded-xl border border-gray-200 p-4">
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2">
-                    <div
-                      className="w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center"
-                      style={{ backgroundColor: "#F4F0FA", color: "#4F2683" }}
-                    >
+                    <div className="w-7 h-7 rounded-full bg-brand-50 text-brand-700 text-xs font-bold flex items-center justify-center">
                       {review.reviewerName.charAt(0)}
                     </div>
                     <span className="text-sm font-medium text-gray-800">{review.reviewerName}</span>

@@ -13,23 +13,21 @@ export default function TutorCard({ tutor, highlightCourse }: Props) {
   const lowestRate = getLowestRate(tutor);
 
   const displayCourses = highlightCourse
-    ? tutor.courses.filter((c) => c.code.toLowerCase() === highlightCourse.toLowerCase())
+    ? tutor.courses.filter((c) =>
+        c.code.toLowerCase().replace(/\s/g, "") ===
+        highlightCourse.toLowerCase().replace(/\s/g, "")
+      )
     : tutor.courses.slice(0, 2);
 
   return (
     <Link href={`/tutors/${tutor.id}`} className="group block">
-      <div className="bg-white rounded-xl border border-gray-200 p-5 hover:border-[#4F2683] hover:shadow-sm transition-all duration-150">
+      <div className="bg-white rounded-xl border border-gray-200 p-5 hover:border-brand-700 hover:shadow-sm transition-all duration-150">
         <div className="flex items-start gap-4">
-          <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
-            <Image
-              src={tutor.photoUrl}
-              alt={tutor.name}
-              fill
-              className="object-cover"
-            />
+          <div className="relative w-12 h-12 rounded-full overflow-hidden bg-brand-50 flex-shrink-0">
+            <Image src={tutor.photoUrl} alt={tutor.name} fill className="object-cover" />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 group-hover:text-[#4F2683] transition-colors truncate text-sm">
+            <h3 className="font-semibold text-gray-900 group-hover:text-brand-700 transition-colors truncate text-sm">
               {tutor.name}
             </h3>
             <p className="text-xs text-gray-400 truncate mt-0.5">
@@ -43,7 +41,8 @@ export default function TutorCard({ tutor, highlightCourse }: Props) {
           </div>
           <div className="text-right flex-shrink-0">
             <p className="text-sm font-semibold text-gray-900">
-              From ${lowestRate}<span className="font-normal text-gray-400 text-xs">/hr</span>
+              From ${lowestRate}
+              <span className="font-normal text-gray-400 text-xs">/hr</span>
             </p>
           </div>
         </div>
@@ -54,14 +53,11 @@ export default function TutorCard({ tutor, highlightCourse }: Props) {
           {displayCourses.map((course) => (
             <span
               key={course.code}
-              className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md"
-              style={{ backgroundColor: "#F4F0FA", color: "#4F2683" }}
+              className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md bg-brand-50 text-brand-700"
             >
               {course.code}
-              {course.grade && (
-                <span style={{ color: "#9B72C8" }}>&middot; {course.grade}</span>
-              )}
-              <span style={{ color: "#9B72C8" }}>&middot; ${course.ratePerHour}/hr</span>
+              {course.grade && <span className="text-brand-400">&middot; {course.grade}</span>}
+              <span className="text-brand-400">&middot; ${course.ratePerHour}/hr</span>
             </span>
           ))}
           {!highlightCourse && tutor.courses.length > 2 && (

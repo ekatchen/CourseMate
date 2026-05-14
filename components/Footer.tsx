@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="border-t border-gray-200 bg-white mt-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <span className="text-base font-bold" style={{ color: "#4F2683" }}>CourseMate</span>
+          <span className="text-base font-bold text-brand-700">CourseMate</span>
           <p className="text-sm text-gray-400 mt-1">Find a tutor for your exact course.</p>
         </div>
         <nav className="flex gap-6 text-sm text-gray-400">

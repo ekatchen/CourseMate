@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { tutors, getAllCourses, getAverageRating } from "@/lib/data";
+import { getAllCourses, Tutor } from "@/lib/data";
+import { fetchApprovedTutors } from "@/lib/queries";
+import { getAverageRating } from "@/lib/data";
 import TutorCard from "@/components/TutorCard";
 import Link from "next/link";
 
@@ -14,25 +16,32 @@ export default function TutorsPage() {
   const [query, setQuery] = useState(initialCourse);
   const [input, setInput] = useState(initialCourse);
   const [sortBy, setSortBy] = useState<"rating" | "rate">("rating");
+  const [tutors, setTutors] = useState<Tutor[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const allCourses = getAllCourses();
 
+  // Fetch tutors whenever query changes
+  useEffect(() => {
+    setLoading(true);
+    fetchApprovedTutors(query || undefined).then((data) => {
+      setTutors(data);
+      setLoading(false);
+    });
+  }, [query]);
+
+  // Sync query from URL param
   useEffect(() => {
     setQuery(initialCourse);
     setInput(initialCourse);
   }, [initialCourse]);
 
-  const approved = tutors.filter((t) => t.status === "approved");
-
-  const filtered = query
-    ? approved.filter((t) =>
-        t.courses.some((c) => c.code.toLowerCase().includes(query.toLowerCase()))
-      )
-    : approved;
-
-  const sorted = [...filtered].sort((a, b) => {
+  const sorted = [...tutors].sort((a, b) => {
     if (sortBy === "rating") return getAverageRating(b) - getAverageRating(a);
-    return Math.min(...a.courses.map((c) => c.ratePerHour)) - Math.min(...b.courses.map((c) => c.ratePerHour));
+    return (
+      Math.min(...a.courses.map((c) => c.ratePerHour)) -
+      Math.min(...b.courses.map((c) => c.ratePerHour))
+    );
   });
 
   function handleSearch(e: React.FormEvent) {
@@ -53,7 +62,7 @@ export default function TutorsPage() {
       <div className="mb-7">
         <h1 className="text-xl font-bold text-gray-900">Tutors</h1>
         <p className="text-sm text-gray-400 mt-1">
-          Search by course code to find someone who already passed your class.
+          Search by course code to find someone who has already taken your class.
         </p>
       </div>
 
@@ -64,16 +73,11 @@ export default function TutorsPage() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Course code — e.g. Calc 1000"
-          className="flex-1 border border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none"
-          onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
-          onBlur={e => e.currentTarget.style.boxShadow = "none"}
+          className="flex-1 border border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-400"
         />
         <button
           type="submit"
-          className="text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors"
-          style={{ backgroundColor: "#4F2683" }}
-          onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#3D1A6E")}
-          onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#4F2683")}
+          className="text-white bg-brand-700 hover:bg-brand-800 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors"
         >
           Search
         </button>
@@ -91,7 +95,8 @@ export default function TutorsPage() {
       {/* Course chips */}
       <div className="flex flex-wrap gap-1.5 mb-6">
         {allCourses.map((c) => {
-          const active = query.toLowerCase() === c.toLowerCase();
+          const active =
+            query.toLowerCase().replace(/\s/g, "") === c.toLowerCase().replace(/\s/g, "");
           return (
             <button
               key={c}
@@ -100,12 +105,11 @@ export default function TutorsPage() {
                 setQuery(c);
                 router.push(`/tutors?course=${encodeURIComponent(c)}`);
               }}
-              className="text-xs px-2.5 py-1 rounded-md font-medium transition-colors"
-              style={
+              className={`text-xs px-2.5 py-1 rounded-md font-medium transition-colors ${
                 active
-                  ? { backgroundColor: "#4F2683", color: "#fff" }
-                  : { backgroundColor: "#F4F0FA", color: "#5C2D91" }
-              }
+                  ? "bg-brand-700 text-white"
+                  : "bg-brand-50 text-brand-700 hover:bg-brand-100"
+              }`}
             >
               {c}
             </button>
@@ -116,13 +120,12 @@ export default function TutorsPage() {
       {/* Results bar */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-xs text-gray-400">
-          {sorted.length} tutor{sorted.length !== 1 ? "s" : ""}
-          {query ? ` for "${query}"` : ""}
+          {loading ? "Loading..." : `${sorted.length} tutor${sorted.length !== 1 ? "s" : ""}${query ? ` for "${query}"` : ""}`}
         </p>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as "rating" | "rate")}
-          className="text-xs border border-gray-200 rounded-md px-3 py-1.5 bg-white text-gray-600 focus:outline-none"
+          className="text-xs border border-gray-200 rounded-md px-3 py-1.5 bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-300"
         >
           <option value="rating">Top rated</option>
           <option value="rate">Lowest rate</option>
@@ -130,7 +133,25 @@ export default function TutorsPage() {
       </div>
 
       {/* Grid */}
-      {sorted.length > 0 ? (
+      {loading ? (
+        <div className="grid sm:grid-cols-2 gap-3">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="bg-white rounded-xl border border-gray-200 p-5 animate-pulse">
+              <div className="flex gap-4">
+                <div className="w-12 h-12 rounded-full bg-gray-100" />
+                <div className="flex-1 space-y-2 pt-1">
+                  <div className="h-3 bg-gray-100 rounded w-1/3" />
+                  <div className="h-3 bg-gray-100 rounded w-1/4" />
+                </div>
+              </div>
+              <div className="mt-3 space-y-1.5">
+                <div className="h-3 bg-gray-100 rounded w-full" />
+                <div className="h-3 bg-gray-100 rounded w-4/5" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : sorted.length > 0 ? (
         <div className="grid sm:grid-cols-2 gap-3">
           {sorted.map((tutor) => (
             <TutorCard key={tutor.id} tutor={tutor} highlightCourse={query || undefined} />
@@ -142,12 +163,11 @@ export default function TutorsPage() {
             No tutors listed for &ldquo;{query}&rdquo;
           </p>
           <p className="text-sm text-gray-400 mb-6">
-            Leave your details and we&apos;ll notify you when one becomes available.
+            Leave your details and we&apos;ll reach out when one becomes available.
           </p>
           <Link
             href={`/request-a-tutor?course=${encodeURIComponent(query)}`}
-            className="inline-block text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
-            style={{ backgroundColor: "#4F2683" }}
+            className="inline-block text-white bg-brand-700 hover:bg-brand-800 px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
           >
             Request a tutor for {query}
           </Link>

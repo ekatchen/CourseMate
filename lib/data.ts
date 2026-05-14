@@ -31,7 +31,7 @@ export const tutors: Tutor[] = [
     name: "Alex Chen",
     program: "Computer Science",
     year: "4th Year",
-    bio: "I've been tutoring CS courses for two years. I focus on making concepts click through real examples, not just theory. I know exactly what Western's CS profs test on.",
+    bio: "I've been tutoring CS courses for two years. I focus on building understanding through worked examples and practice problems. I'm familiar with how these courses are structured and what students typically find difficult.",
     photoUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
     status: "approved",
     courses: [
@@ -40,9 +40,9 @@ export const tutors: Tutor[] = [
       { code: "CS 2210", name: "Data Structures and Analysis", ratePerHour: 35, grade: "A" },
     ],
     reviews: [
-      { id: "r1", reviewerName: "Jamie L.", rating: 5, comment: "Alex explained recursion in a way that finally made sense. Went from failing to passing my midterm.", date: "2025-03-10" },
-      { id: "r2", reviewerName: "Priya M.", rating: 5, comment: "Super patient and knows the material cold. Would 100% recommend.", date: "2025-02-22" },
-      { id: "r3", reviewerName: "Tom W.", rating: 4, comment: "Really helpful for CS 1027. Helped me understand linked lists before the final.", date: "2025-01-15" },
+      { id: "r1", reviewerName: "Jamie L.", rating: 5, comment: "Clear explanations and useful practice questions. Helped me understand recursion properly.", date: "2025-03-10" },
+      { id: "r2", reviewerName: "Priya M.", rating: 5, comment: "Patient and thorough. Good at walking through problems step by step.", date: "2025-02-22" },
+      { id: "r3", reviewerName: "Tom W.", rating: 4, comment: "Helpful for CS 1027. Made linked lists much clearer before the final.", date: "2025-01-15" },
     ],
   },
   {
@@ -50,7 +50,7 @@ export const tutors: Tutor[] = [
     name: "Sarah Okafor",
     program: "Mathematics",
     year: "3rd Year",
-    bio: "Math has always come naturally to me and I love helping others see the patterns. I take time to understand where you're stuck before jumping to solutions.",
+    bio: "I focus on helping students work through problems methodically rather than memorising steps. I take time to identify where the confusion is before jumping to solutions.",
     photoUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
     status: "approved",
     courses: [
@@ -59,8 +59,8 @@ export const tutors: Tutor[] = [
       { code: "Math 1600", name: "Linear Algebra I", ratePerHour: 25, grade: "A" },
     ],
     reviews: [
-      { id: "r4", reviewerName: "Daniel R.", rating: 5, comment: "Sarah saved my Calc 1000 mark. She knew exactly which types of problems show up on the Western final.", date: "2025-04-02" },
-      { id: "r5", reviewerName: "Mia K.", rating: 5, comment: "Best tutor I've ever had. Clear, fast, and affordable.", date: "2025-03-18" },
+      { id: "r4", reviewerName: "Daniel R.", rating: 5, comment: "Helpful for reviewing problem-solving steps before the midterm. Explained the material clearly.", date: "2025-04-02" },
+      { id: "r5", reviewerName: "Mia K.", rating: 5, comment: "Good at breaking down difficult concepts. Sessions were focused and efficient.", date: "2025-03-18" },
     ],
   },
   {
@@ -68,7 +68,7 @@ export const tutors: Tutor[] = [
     name: "Marcus Dubois",
     program: "Biology",
     year: "2nd Year",
-    bio: "Just finished first year Bio with a 90+ average. I know the exact diagrams, lab reports, and exam questions Western uses. Happy to help you avoid the mistakes I made.",
+    bio: "Recently completed first-year Biology and Chemistry. I'm familiar with the structure of these courses and can help with concepts, lab prep, and working through practice material.",
     photoUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
     status: "approved",
     courses: [
@@ -77,8 +77,8 @@ export const tutors: Tutor[] = [
       { code: "Chem 1301", name: "Introductory Chemistry I", ratePerHour: 24, grade: "A-" },
     ],
     reviews: [
-      { id: "r6", reviewerName: "Aisha T.", rating: 4, comment: "Really knows Bio 1001 inside out. Helped me with the ecology unit which was giving me a lot of trouble.", date: "2025-02-28" },
-      { id: "r7", reviewerName: "Luke P.", rating: 5, comment: "Marcus explained the Chem 1301 lab reports perfectly. My grade went up a full letter.", date: "2025-01-30" },
+      { id: "r6", reviewerName: "Aisha T.", rating: 4, comment: "Helped me understand the ecology unit more clearly. Good at explaining the weekly material.", date: "2025-02-28" },
+      { id: "r7", reviewerName: "Luke P.", rating: 5, comment: "Explained the lab report format well. Made the course feel more manageable.", date: "2025-01-30" },
     ],
   },
   {
@@ -86,7 +86,7 @@ export const tutors: Tutor[] = [
     name: "Nadia Petrov",
     program: "Economics",
     year: "3rd Year",
-    bio: "I tutor Econ and Business courses with a focus on exam prep. I've taken every first and second year Econ course at Western and know what the professors actually test on.",
+    bio: "I tutor Econ and introductory Business courses. I focus on exam prep, concept clarity, and working through practice problems. I've completed all the first and second-year Econ courses.",
     photoUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Nadia",
     status: "approved",
     courses: [
@@ -95,9 +95,9 @@ export const tutors: Tutor[] = [
       { code: "Bus 1220", name: "Introduction to Business", ratePerHour: 22, grade: "A" },
     ],
     reviews: [
-      { id: "r8", reviewerName: "Chloe B.", rating: 5, comment: "Nadia made supply and demand graphs finally click. Got an 88 on my midterm after one session.", date: "2025-03-25" },
-      { id: "r9", reviewerName: "Ryan S.", rating: 5, comment: "Great tutor for Econ 1021. She knows exactly what Tombe tests on.", date: "2025-02-10" },
-      { id: "r10", reviewerName: "Fatima H.", rating: 4, comment: "Helpful for Econ 1022, especially the macro models. Would book again.", date: "2025-01-20" },
+      { id: "r8", reviewerName: "Chloe B.", rating: 5, comment: "Explained supply and demand clearly. Helped me work through the problem sets before the midterm.", date: "2025-03-25" },
+      { id: "r9", reviewerName: "Ryan S.", rating: 5, comment: "Good tutor for Econ 1021. Structured sessions well and was easy to follow.", date: "2025-02-10" },
+      { id: "r10", reviewerName: "Fatima H.", rating: 4, comment: "Helpful for Econ 1022, particularly the macro models. Would book again.", date: "2025-01-20" },
     ],
   },
   {
@@ -105,7 +105,7 @@ export const tutors: Tutor[] = [
     name: "James Nguyen",
     program: "Engineering",
     year: "3rd Year",
-    bio: "Eng Sci and Physics tutor. I scored in the top 5% of my first year cohort and now help other eng students get through the hardest first-year courses.",
+    bio: "I tutor Engineering and Physics courses. I find worked examples the most effective way to build understanding, and I focus on making sure the fundamentals are clear before moving to harder problems.",
     photoUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=James",
     status: "approved",
     courses: [
@@ -115,8 +115,8 @@ export const tutors: Tutor[] = [
       { code: "Calc 1000", name: "Calculus I", ratePerHour: 28, grade: "A" },
     ],
     reviews: [
-      { id: "r11", reviewerName: "Sophie W.", rating: 5, comment: "James got me through Physics 1028. His practice problems were harder than the actual exam, which was the point.", date: "2025-04-01" },
-      { id: "r12", reviewerName: "Omar A.", rating: 4, comment: "Solid tutor for Eng 1022. Made the moment/torque concepts clear with good diagrams.", date: "2025-03-05" },
+      { id: "r11", reviewerName: "Sophie W.", rating: 5, comment: "Explained the structure of Physics 1028 clearly and provided useful practice problems.", date: "2025-04-01" },
+      { id: "r12", reviewerName: "Omar A.", rating: 4, comment: "Helpful for Eng 1022. Good diagrams and clear explanations of moment and torque.", date: "2025-03-05" },
     ],
   },
   {
@@ -124,7 +124,7 @@ export const tutors: Tutor[] = [
     name: "Emma Larson",
     program: "Psychology",
     year: "4th Year",
-    bio: "Psychology tutor with 3 years of experience helping students navigate Western's Psych department. I know all the key theories, researchers, and the exact essay formats profs expect.",
+    bio: "I've completed most of the Psychology course sequence and tutor both introductory and upper-year courses. I help students work through lecture material, structure essays, and prepare for assessments.",
     photoUrl: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
     status: "approved",
     courses: [
@@ -133,12 +133,38 @@ export const tutors: Tutor[] = [
       { code: "Psych 2800", name: "Research Methods in Psychology", ratePerHour: 25, grade: "A" },
     ],
     reviews: [
-      { id: "r13", reviewerName: "Lily C.", rating: 5, comment: "Emma helped me structure my Psych essays properly. My grades improved immediately.", date: "2025-03-20" },
-      { id: "r14", reviewerName: "Noah J.", rating: 5, comment: "Psych 1000 was overwhelming until I found Emma. She breaks the massive content down really well.", date: "2025-02-14" },
-      { id: "r15", reviewerName: "Grace T.", rating: 5, comment: "Best psych tutor at Western. Has notes from every year going back to 2022.", date: "2025-01-08" },
+      { id: "r13", reviewerName: "Lily C.", rating: 5, comment: "Helped me structure my essays more clearly. Useful feedback and practical advice.", date: "2025-03-20" },
+      { id: "r14", reviewerName: "Noah J.", rating: 5, comment: "Good at breaking down the Psych 1000 content. Made the course feel more manageable.", date: "2025-02-14" },
+      { id: "r15", reviewerName: "Grace T.", rating: 5, comment: "Well-organised sessions and explained concepts clearly. Easy to follow.", date: "2025-01-08" },
     ],
   },
 ];
+
+// ─── Search helpers ──────────────────────────────────────────────────────────
+
+function normalize(s: string): string {
+  return s.trim().toLowerCase().replace(/\s+/g, " ");
+}
+
+export function matchesCourseQuery(query: string, code: string, name: string): boolean {
+  if (!query) return true;
+  const q = normalize(query);
+  const qNoSpace = q.replace(/\s/g, "");
+  const codeNorm = normalize(code);
+  const codeNoSpace = codeNorm.replace(/\s/g, "");
+  const nameNorm = normalize(name);
+
+  // Match code with or without space: "CS1026" matches "CS 1026"
+  if (codeNoSpace.includes(qNoSpace) || qNoSpace.includes(codeNoSpace)) return true;
+  // Partial code with spaces: "calc 1" matches "Calc 1000"
+  if (codeNorm.includes(q)) return true;
+  // Course name: "micro" matches "Principles of Microeconomics"
+  if (nameNorm.includes(q)) return true;
+
+  return false;
+}
+
+// ─── Data helpers ─────────────────────────────────────────────────────────────
 
 export function getAllCourses(): string[] {
   const codes = new Set<string>();
@@ -146,11 +172,11 @@ export function getAllCourses(): string[] {
   return Array.from(codes).sort();
 }
 
-export function getTutorsByCoursCode(code: string): Tutor[] {
+export function getTutorsByCourseCode(query: string): Tutor[] {
   return tutors.filter(
     (t) =>
       t.status === "approved" &&
-      t.courses.some((c) => c.code.toLowerCase() === code.toLowerCase())
+      t.courses.some((c) => matchesCourseQuery(query, c.code, c.name))
   );
 }
 

@@ -16,11 +16,10 @@ export default function Navbar() {
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-15 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 py-4">
-          <span className="text-lg font-bold tracking-tight" style={{ color: "#4F2683" }}>CourseMate</span>
+        <Link href="/" className="flex items-center py-4">
+          <span className="text-lg font-bold tracking-tight text-brand-700">CourseMate</span>
         </Link>
 
-        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6">
           {links.map((l) => (
             <Link
@@ -31,23 +30,18 @@ export default function Navbar() {
                   ? "text-brand-700"
                   : "text-gray-500 hover:text-gray-900"
               }`}
-              style={pathname === l.href ? { color: "#4F2683" } : {}}
             >
               {l.label}
             </Link>
           ))}
           <Link
             href="/request-a-tutor"
-            className="text-sm font-medium text-white px-4 py-2 rounded-lg transition-colors"
-            style={{ backgroundColor: "#4F2683" }}
-            onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#3D1A6E")}
-            onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#4F2683")}
+            className="text-sm font-medium text-white bg-brand-700 hover:bg-brand-800 px-4 py-2 rounded-lg transition-colors"
           >
             Request a Tutor
           </Link>
         </nav>
 
-        {/* Mobile hamburger */}
         <button
           className="md:hidden p-2 text-gray-500"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -65,7 +59,6 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden border-t border-gray-100 bg-white px-4 py-3 flex flex-col gap-3">
           {links.map((l) => (
@@ -73,8 +66,9 @@ export default function Navbar() {
               key={l.href}
               href={l.href}
               onClick={() => setMenuOpen(false)}
-              className="text-sm font-medium text-gray-700"
-              style={pathname === l.href ? { color: "#4F2683" } : {}}
+              className={`text-sm font-medium ${
+                pathname === l.href ? "text-brand-700" : "text-gray-700"
+              }`}
             >
               {l.label}
             </Link>
@@ -82,8 +76,7 @@ export default function Navbar() {
           <Link
             href="/request-a-tutor"
             onClick={() => setMenuOpen(false)}
-            className="text-sm font-medium text-white px-4 py-2 rounded-lg text-center"
-            style={{ backgroundColor: "#4F2683" }}
+            className="text-sm font-medium text-white bg-brand-700 px-4 py-2 rounded-lg text-center"
           >
             Request a Tutor
           </Link>
