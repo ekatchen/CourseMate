@@ -17,52 +17,52 @@ export default function HomePage() {
     e.preventDefault();
     const trimmed = query.trim();
     if (trimmed) router.push(`/tutors?course=${encodeURIComponent(trimmed)}`);
+    else router.push("/tutors");
   }
 
   return (
     <div>
       {/* Hero */}
       <section className="bg-white border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-20 text-center">
-          <div className="inline-block bg-indigo-50 text-indigo-600 text-sm font-medium px-3 py-1 rounded-full mb-6">
-            Peer tutoring · Course-code search · Western University
-          </div>
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">
+            Peer tutoring &middot; Western University
+          </p>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
-            Find a tutor for{" "}
-            <span className="text-indigo-600">your exact course.</span>
+            Find a tutor for your exact course.
           </h1>
-          <p className="mt-5 text-lg text-gray-500 max-w-2xl mx-auto">
-            Not just &ldquo;math help&rdquo; — find someone who already took{" "}
-            <strong className="text-gray-700">Calc 1000</strong>, knows your professor,
-            and aced the exact midterm you&apos;re studying for.
+          <p className="mt-5 text-base sm:text-lg text-gray-500 max-w-xl mx-auto leading-relaxed">
+            Browse peer tutors by course code, compare rates, and request help when no tutor is listed yet.
           </p>
 
-          {/* Search bar */}
-          <form onSubmit={handleSearch} className="mt-8 max-w-xl mx-auto">
-            <div className="flex gap-2 shadow-sm">
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search by course code, e.g. Calc 1000"
-                className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
-              />
-              <button
-                type="submit"
-                className="bg-indigo-600 text-white px-5 py-3 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors whitespace-nowrap"
-              >
-                Find Tutors
-              </button>
-            </div>
+          <form onSubmit={handleSearch} className="mt-8 max-w-lg mx-auto flex gap-2">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Course code — e.g. Calc 1000, CS 1026"
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:border-transparent"
+              style={{ focusRingColor: "#4F2683" } as React.CSSProperties}
+              onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+              onBlur={e => e.currentTarget.style.boxShadow = "none"}
+            />
+            <button
+              type="submit"
+              className="text-white px-5 py-3 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap"
+              style={{ backgroundColor: "#4F2683" }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#3D1A6E")}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#4F2683")}
+            >
+              Find a Tutor
+            </button>
           </form>
 
-          {/* Popular courses */}
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
             {popularCourses.map((c) => (
               <button
                 key={c}
                 onClick={() => router.push(`/tutors?course=${encodeURIComponent(c)}`)}
-                className="text-xs bg-gray-100 hover:bg-indigo-50 hover:text-indigo-600 text-gray-600 px-3 py-1.5 rounded-full transition-colors"
+                className="text-xs bg-gray-100 text-gray-500 px-3 py-1.5 rounded-md transition-colors hover:bg-gray-200"
               >
                 {c}
               </button>
@@ -72,21 +72,25 @@ export default function HomePage() {
       </section>
 
       {/* Value props */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 grid sm:grid-cols-2 gap-6">
-        <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <div className="text-2xl mb-3">🎓</div>
-          <h2 className="text-lg font-bold text-gray-900">For students</h2>
-          <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-            Find someone who already took your course and understands the professor,
-            assignments, midterms, final exam style, and what actually matters.
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 grid sm:grid-cols-2 gap-4">
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">For students</p>
+          <h2 className="text-base font-bold text-gray-900 mb-2">
+            Find someone who already took your course.
+          </h2>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            Search by exact course code and find a tutor who knows your professor,
+            the assignments, and what actually shows up on the exam.
           </p>
         </div>
-        <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <div className="text-2xl mb-3">💰</div>
-          <h2 className="text-lg font-bold text-gray-900">For tutors</h2>
-          <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-            Get paid to tutor courses you already did well in, without having to find
-            clients yourself. Set your own rate and schedule.
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">For tutors</p>
+          <h2 className="text-base font-bold text-gray-900 mb-2">
+            Get paid to tutor courses you already passed.
+          </h2>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            List the courses you did well in, set your rate, and let students come to you.
+            No marketing required.
           </p>
         </div>
       </section>
@@ -94,30 +98,32 @@ export default function HomePage() {
       {/* How it works */}
       <section className="bg-white border-y border-gray-100">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-10">How it works</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400 text-center mb-10">
+            How it works
+          </h2>
           <div className="grid sm:grid-cols-3 gap-8">
             {[
               {
-                step: "1",
-                title: "Search your course",
-                desc: "Type in your exact course code — like CS 1026 or Econ 1021 — and see tutors who already took it.",
+                step: "01",
+                title: "Search by course code",
+                desc: "Type in your exact course — CS 1026, Econ 1021, Calc 1000 — and see tutors who already passed it.",
               },
               {
-                step: "2",
-                title: "Compare tutors",
-                desc: "See rates, reviews, grades earned, and teaching styles upfront. No surprises.",
+                step: "02",
+                title: "Compare and choose",
+                desc: "View rates, grades earned, reviews, and teaching styles before reaching out.",
               },
               {
-                step: "3",
-                title: "Get in touch",
-                desc: "Contact your tutor directly to set up a session. Simple, fast, no middleman.",
+                step: "03",
+                title: "Contact directly",
+                desc: "Message your tutor to set up a session. No platform fees, no scheduling system.",
               },
             ].map((item) => (
-              <div key={item.step} className="text-center">
-                <div className="w-10 h-10 rounded-full bg-indigo-600 text-white font-bold text-sm flex items-center justify-center mx-auto mb-4">
+              <div key={item.step}>
+                <p className="text-2xl font-bold mb-3" style={{ color: "#4F2683", opacity: 0.25 }}>
                   {item.step}
-                </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
+                </p>
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm">{item.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
               </div>
             ))}
@@ -125,17 +131,22 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* CTA strip */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+      {/* Tutor CTA */}
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Know your course well?</h2>
-          <p className="text-sm text-gray-500 mt-1">Earn money helping other students pass.</p>
+          <h2 className="text-base font-bold text-gray-900">Did well in a course?</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Apply to tutor it. Set your own rate and start getting students.
+          </p>
         </div>
         <Link
           href="/become-a-tutor"
-          className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition-colors whitespace-nowrap"
+          className="text-white px-5 py-2.5 rounded-lg font-semibold text-sm transition-colors whitespace-nowrap"
+          style={{ backgroundColor: "#4F2683" }}
+          onMouseEnter={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "#3D1A6E")}
+          onMouseLeave={e => ((e.currentTarget as HTMLElement).style.backgroundColor = "#4F2683")}
         >
-          Become a Tutor →
+          Become a Tutor
         </Link>
       </section>
     </div>

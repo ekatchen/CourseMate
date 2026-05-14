@@ -4,6 +4,9 @@ import { useState } from "react";
 
 type CourseEntry = { code: string; name: string; rate: string; grade: string };
 
+const inputClass =
+  "w-full border border-gray-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none text-gray-900 placeholder-gray-300";
+
 export default function BecomeTutorPage() {
   const [submitted, setSubmitted] = useState(false);
   const [courses, setCourses] = useState<CourseEntry[]>([
@@ -31,15 +34,21 @@ export default function BecomeTutorPage() {
 
   if (submitted) {
     return (
-      <div className="max-w-lg mx-auto px-4 sm:px-6 py-20 text-center">
-        <div className="text-5xl mb-4">🎉</div>
-        <h1 className="text-2xl font-bold text-gray-900">Application received!</h1>
-        <p className="text-gray-500 mt-3 leading-relaxed">
-          Thanks for applying to be a tutor on CourseMate. We review all applications
-          manually and will be in touch within 1–2 business days.
+      <div className="max-w-lg mx-auto px-4 sm:px-6 py-24 text-center">
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center mx-auto mb-5"
+          style={{ backgroundColor: "#F4F0FA" }}
+        >
+          <svg className="w-5 h-5" style={{ color: "#4F2683" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h1 className="text-xl font-bold text-gray-900">Application submitted</h1>
+        <p className="text-sm text-gray-500 mt-3 leading-relaxed">
+          We review all applications manually and will email you within 1&ndash;2 business days.
         </p>
-        <a href="/" className="inline-block mt-6 text-indigo-600 text-sm font-medium hover:underline">
-          ← Back to home
+        <a href="/" className="inline-block mt-6 text-sm font-medium transition-colors" style={{ color: "#4F2683" }}>
+          &larr; Back to home
         </a>
       </div>
     );
@@ -47,38 +56,46 @@ export default function BecomeTutorPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Become a Tutor</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Get paid to help other students in courses you already crushed.
-          We review every application before your profile goes live.
+      <div className="mb-7">
+        <h1 className="text-xl font-bold text-gray-900">Become a Tutor</h1>
+        <p className="text-sm text-gray-400 mt-1">
+          List the courses you did well in, set your hourly rate, and let students find you.
+          Every application is reviewed before your profile goes live.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         {/* Personal info */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col gap-4">
-          <h2 className="font-semibold text-gray-800">Your info</h2>
+        <div className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col gap-4">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Your info</h2>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Full name *</label>
-              <input required type="text" placeholder="e.g. Alex Chen" className={inputClass} />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Full name <span className="text-gray-300">*</span></label>
+              <input required type="text" placeholder="e.g. Alex Chen" className={inputClass}
+                onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+                onBlur={e => e.currentTarget.style.boxShadow = "none"} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-              <input required type="email" placeholder="you@uwo.ca" className={inputClass} />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email <span className="text-gray-300">*</span></label>
+              <input required type="email" placeholder="you@uwo.ca" className={inputClass}
+                onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+                onBlur={e => e.currentTarget.style.boxShadow = "none"} />
             </div>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Program *</label>
-              <input required type="text" placeholder="e.g. Computer Science" className={inputClass} />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Program <span className="text-gray-300">*</span></label>
+              <input required type="text" placeholder="e.g. Computer Science" className={inputClass}
+                onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+                onBlur={e => e.currentTarget.style.boxShadow = "none"} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Year *</label>
-              <select required className={inputClass} defaultValue="">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Year <span className="text-gray-300">*</span></label>
+              <select required className={inputClass} defaultValue=""
+                onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+                onBlur={e => e.currentTarget.style.boxShadow = "none"}>
                 <option value="" disabled>Select year</option>
                 <option>1st Year</option>
                 <option>2nd Year</option>
@@ -91,27 +108,31 @@ export default function BecomeTutorPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Short bio *{" "}
-              <span className="text-gray-400 font-normal">(shown on your profile)</span>
+              Short bio <span className="text-gray-300">*</span>{" "}
+              <span className="text-gray-400 font-normal text-xs">(shown on your profile)</span>
             </label>
             <textarea
               required
               rows={3}
-              placeholder="Tell students why you'd be a great tutor. What courses did you do well in? What's your teaching style?"
+              placeholder="Describe your experience with the courses you tutor. What do you focus on? How do you typically run a session?"
               className={inputClass}
+              onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+              onBlur={e => e.currentTarget.style.boxShadow = "none"}
             />
           </div>
         </div>
 
         {/* Courses */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 flex flex-col gap-4">
-          <h2 className="font-semibold text-gray-800">Courses you want to tutor</h2>
-          <p className="text-xs text-gray-400 -mt-2">Add each course separately.</p>
+        <div className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col gap-4">
+          <div>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Courses to tutor</h2>
+            <p className="text-xs text-gray-400 mt-1">Add each course separately.</p>
+          </div>
 
           {courses.map((course, i) => (
-            <div key={i} className="grid sm:grid-cols-4 gap-3 items-start border border-gray-100 rounded-xl p-3 bg-gray-50">
+            <div key={i} className="grid sm:grid-cols-4 gap-3 items-start p-3 rounded-lg" style={{ backgroundColor: "#F7F5FA" }}>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Course code *</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Course code <span className="text-gray-300">*</span></label>
                 <input
                   required
                   type="text"
@@ -119,20 +140,24 @@ export default function BecomeTutorPage() {
                   value={course.code}
                   onChange={(e) => updateCourse(i, "code", e.target.value)}
                   className={inputClass}
+                  onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+                  onBlur={e => e.currentTarget.style.boxShadow = "none"}
                 />
               </div>
-              <div className="sm:col-span-1">
-                <label className="block text-xs font-medium text-gray-600 mb-1">Course name</label>
+              <div>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Course name</label>
                 <input
                   type="text"
                   placeholder="e.g. Calculus I"
                   value={course.name}
                   onChange={(e) => updateCourse(i, "name", e.target.value)}
                   className={inputClass}
+                  onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+                  onBlur={e => e.currentTarget.style.boxShadow = "none"}
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Rate/hr ($) *</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Rate/hr ($) <span className="text-gray-300">*</span></label>
                 <input
                   required
                   type="number"
@@ -142,10 +167,12 @@ export default function BecomeTutorPage() {
                   value={course.rate}
                   onChange={(e) => updateCourse(i, "rate", e.target.value)}
                   className={inputClass}
+                  onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+                  onBlur={e => e.currentTarget.style.boxShadow = "none"}
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Grade earned</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Grade earned</label>
                 <div className="flex gap-1">
                   <input
                     type="text"
@@ -153,14 +180,16 @@ export default function BecomeTutorPage() {
                     value={course.grade}
                     onChange={(e) => updateCourse(i, "grade", e.target.value)}
                     className={inputClass}
+                    onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+                    onBlur={e => e.currentTarget.style.boxShadow = "none"}
                   />
                   {courses.length > 1 && (
                     <button
                       type="button"
                       onClick={() => removeCourse(i)}
-                      className="text-gray-400 hover:text-red-500 px-1 transition-colors"
+                      className="text-gray-300 hover:text-gray-500 px-1 transition-colors text-lg leading-none"
                     >
-                      ×
+                      &times;
                     </button>
                   )}
                 </div>
@@ -171,20 +200,23 @@ export default function BecomeTutorPage() {
           <button
             type="button"
             onClick={addCourse}
-            className="text-sm text-indigo-600 font-medium hover:underline self-start"
+            className="text-sm font-medium self-start transition-colors"
+            style={{ color: "#4F2683" }}
           >
             + Add another course
           </button>
         </div>
 
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-800">
-          <strong>Note:</strong> All applications are reviewed manually before your profile goes live.
-          We&apos;ll email you when you&apos;re approved.
-        </div>
+        <p className="text-xs text-gray-400 border border-gray-200 rounded-lg px-4 py-3 bg-white">
+          Applications are reviewed before going live. You&apos;ll receive an email once approved.
+        </p>
 
         <button
           type="submit"
-          className="bg-indigo-600 text-white py-3 px-6 rounded-xl font-semibold text-sm hover:bg-indigo-700 transition-colors"
+          className="text-white py-3 px-6 rounded-lg font-semibold text-sm transition-colors"
+          style={{ backgroundColor: "#4F2683" }}
+          onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#3D1A6E")}
+          onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#4F2683")}
         >
           Submit Application
         </button>
@@ -192,6 +224,3 @@ export default function BecomeTutorPage() {
     </div>
   );
 }
-
-const inputClass =
-  "w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white";

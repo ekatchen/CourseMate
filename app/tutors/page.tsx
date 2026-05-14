@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { tutors, getAllCourses, Tutor, getAverageRating } from "@/lib/data";
+import { tutors, getAllCourses, getAverageRating } from "@/lib/data";
 import TutorCard from "@/components/TutorCard";
 import Link from "next/link";
 
@@ -31,9 +31,7 @@ export default function TutorsPage() {
     : approved;
 
   const sorted = [...filtered].sort((a, b) => {
-    if (sortBy === "rating") {
-      return getAverageRating(b) - getAverageRating(a);
-    }
+    if (sortBy === "rating") return getAverageRating(b) - getAverageRating(a);
     return Math.min(...a.courses.map((c) => c.ratePerHour)) - Math.min(...b.courses.map((c) => c.ratePerHour));
   });
 
@@ -41,9 +39,7 @@ export default function TutorsPage() {
     e.preventDefault();
     const trimmed = input.trim();
     setQuery(trimmed);
-    const params = new URLSearchParams();
-    if (trimmed) params.set("course", trimmed);
-    router.push(`/tutors${trimmed ? `?course=${encodeURIComponent(trimmed)}` : ""}`);
+    router.push(trimmed ? `/tutors?course=${encodeURIComponent(trimmed)}` : "/tutors");
   }
 
   function clearSearch() {
@@ -54,25 +50,30 @@ export default function TutorsPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Find a Tutor</h1>
-        <p className="text-sm text-gray-500 mt-1">
-          Search by exact course code to find someone who already aced your class.
+      <div className="mb-7">
+        <h1 className="text-xl font-bold text-gray-900">Tutors</h1>
+        <p className="text-sm text-gray-400 mt-1">
+          Search by course code to find someone who already passed your class.
         </p>
       </div>
 
-      {/* Search + sort bar */}
+      {/* Search bar */}
       <form onSubmit={handleSearch} className="flex gap-2 mb-4">
         <input
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Course code, e.g. Calc 1000"
-          className="flex-1 border border-gray-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
+          placeholder="Course code — e.g. Calc 1000"
+          className="flex-1 border border-gray-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none"
+          onFocus={e => e.currentTarget.style.boxShadow = "0 0 0 2px #4F268340"}
+          onBlur={e => e.currentTarget.style.boxShadow = "none"}
         />
         <button
           type="submit"
-          className="bg-indigo-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors"
+          className="text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+          style={{ backgroundColor: "#4F2683" }}
+          onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#3D1A6E")}
+          onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#4F2683")}
         >
           Search
         </button>
@@ -80,7 +81,7 @@ export default function TutorsPage() {
           <button
             type="button"
             onClick={clearSearch}
-            className="px-4 py-2.5 rounded-xl text-sm text-gray-500 border border-gray-200 hover:bg-gray-50 transition-colors"
+            className="px-4 py-2.5 rounded-lg text-sm text-gray-400 border border-gray-200 bg-white hover:bg-gray-50 transition-colors"
           >
             Clear
           </button>
@@ -88,61 +89,67 @@ export default function TutorsPage() {
       </form>
 
       {/* Course chips */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        {allCourses.map((c) => (
-          <button
-            key={c}
-            onClick={() => {
-              setInput(c);
-              setQuery(c);
-              router.push(`/tutors?course=${encodeURIComponent(c)}`);
-            }}
-            className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
-              query.toLowerCase() === c.toLowerCase()
-                ? "bg-indigo-600 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-indigo-50 hover:text-indigo-600"
-            }`}
-          >
-            {c}
-          </button>
-        ))}
+      <div className="flex flex-wrap gap-1.5 mb-6">
+        {allCourses.map((c) => {
+          const active = query.toLowerCase() === c.toLowerCase();
+          return (
+            <button
+              key={c}
+              onClick={() => {
+                setInput(c);
+                setQuery(c);
+                router.push(`/tutors?course=${encodeURIComponent(c)}`);
+              }}
+              className="text-xs px-2.5 py-1 rounded-md font-medium transition-colors"
+              style={
+                active
+                  ? { backgroundColor: "#4F2683", color: "#fff" }
+                  : { backgroundColor: "#F4F0FA", color: "#5C2D91" }
+              }
+            >
+              {c}
+            </button>
+          );
+        })}
       </div>
 
-      {/* Results header */}
+      {/* Results bar */}
       <div className="flex items-center justify-between mb-4">
-        <p className="text-sm text-gray-500">
+        <p className="text-xs text-gray-400">
           {sorted.length} tutor{sorted.length !== 1 ? "s" : ""}
           {query ? ` for "${query}"` : ""}
         </p>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as "rating" | "rate")}
-          className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          className="text-xs border border-gray-200 rounded-md px-3 py-1.5 bg-white text-gray-600 focus:outline-none"
         >
-          <option value="rating">Sort: Top rated</option>
-          <option value="rate">Sort: Lowest rate</option>
+          <option value="rating">Top rated</option>
+          <option value="rate">Lowest rate</option>
         </select>
       </div>
 
-      {/* Tutor grid */}
+      {/* Grid */}
       {sorted.length > 0 ? (
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-2 gap-3">
           {sorted.map((tutor) => (
             <TutorCard key={tutor.id} tutor={tutor} highlightCourse={query || undefined} />
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-white rounded-2xl border border-gray-200">
-          <p className="text-4xl mb-4">🔍</p>
-          <h2 className="text-lg font-semibold text-gray-800">No tutors found for &ldquo;{query}&rdquo;</h2>
-          <p className="text-sm text-gray-500 mt-2 mb-6">
-            No one is tutoring this course yet — but you can request one.
+        <div className="py-20 bg-white rounded-xl border border-gray-200 text-center">
+          <p className="text-sm font-semibold text-gray-800 mb-1">
+            No tutors listed for &ldquo;{query}&rdquo;
+          </p>
+          <p className="text-sm text-gray-400 mb-6">
+            Leave your details and we&apos;ll notify you when one becomes available.
           </p>
           <Link
             href={`/request-a-tutor?course=${encodeURIComponent(query)}`}
-            className="inline-block bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-indigo-700 transition-colors"
+            className="inline-block text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+            style={{ backgroundColor: "#4F2683" }}
           >
-            Request a Tutor for {query}
+            Request a tutor for {query}
           </Link>
         </div>
       )}

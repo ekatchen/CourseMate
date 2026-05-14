@@ -18,9 +18,9 @@ export default function TutorCard({ tutor, highlightCourse }: Props) {
 
   return (
     <Link href={`/tutors/${tutor.id}`} className="group block">
-      <div className="bg-white rounded-2xl border border-gray-200 p-5 hover:border-indigo-300 hover:shadow-md transition-all duration-200">
+      <div className="bg-white rounded-xl border border-gray-200 p-5 hover:border-[#4F2683] hover:shadow-sm transition-all duration-150">
         <div className="flex items-start gap-4">
-          <div className="relative w-14 h-14 rounded-full overflow-hidden bg-indigo-50 flex-shrink-0">
+          <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
             <Image
               src={tutor.photoUrl}
               alt={tutor.name}
@@ -29,42 +29,43 @@ export default function TutorCard({ tutor, highlightCourse }: Props) {
             />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors truncate">
+            <h3 className="font-semibold text-gray-900 group-hover:text-[#4F2683] transition-colors truncate text-sm">
               {tutor.name}
             </h3>
-            <p className="text-sm text-gray-500 truncate">
-              {tutor.program} · {tutor.year}
+            <p className="text-xs text-gray-400 truncate mt-0.5">
+              {tutor.program} &middot; {tutor.year}
             </p>
             {tutor.reviews.length > 0 && (
-              <div className="mt-1">
+              <div className="mt-1.5">
                 <StarRating rating={avg} count={tutor.reviews.length} />
               </div>
             )}
           </div>
           <div className="text-right flex-shrink-0">
             <p className="text-sm font-semibold text-gray-900">
-              From ${lowestRate}<span className="font-normal text-gray-400">/hr</span>
+              From ${lowestRate}<span className="font-normal text-gray-400 text-xs">/hr</span>
             </p>
           </div>
         </div>
 
-        <p className="mt-3 text-sm text-gray-600 line-clamp-2">{tutor.bio}</p>
+        <p className="mt-3 text-sm text-gray-500 line-clamp-2 leading-relaxed">{tutor.bio}</p>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-1.5">
           {displayCourses.map((course) => (
             <span
               key={course.code}
-              className="inline-flex items-center gap-1.5 bg-indigo-50 text-indigo-700 text-xs font-medium px-2.5 py-1 rounded-full"
+              className="inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-md"
+              style={{ backgroundColor: "#F4F0FA", color: "#4F2683" }}
             >
               {course.code}
               {course.grade && (
-                <span className="text-indigo-400">· {course.grade}</span>
+                <span style={{ color: "#9B72C8" }}>&middot; {course.grade}</span>
               )}
-              <span className="text-indigo-400">· ${course.ratePerHour}/hr</span>
+              <span style={{ color: "#9B72C8" }}>&middot; ${course.ratePerHour}/hr</span>
             </span>
           ))}
           {!highlightCourse && tutor.courses.length > 2 && (
-            <span className="inline-flex items-center bg-gray-100 text-gray-500 text-xs font-medium px-2.5 py-1 rounded-full">
+            <span className="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-md bg-gray-100 text-gray-400">
               +{tutor.courses.length - 2} more
             </span>
           )}

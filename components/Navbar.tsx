@@ -15,9 +15,9 @@ export default function Navbar() {
 
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold text-indigo-600 tracking-tight">CourseMate</span>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-15 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2 py-4">
+          <span className="text-lg font-bold tracking-tight" style={{ color: "#4F2683" }}>CourseMate</span>
         </Link>
 
         {/* Desktop nav */}
@@ -28,16 +28,20 @@ export default function Navbar() {
               href={l.href}
               className={`text-sm font-medium transition-colors ${
                 pathname === l.href
-                  ? "text-indigo-600"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "text-brand-700"
+                  : "text-gray-500 hover:text-gray-900"
               }`}
+              style={pathname === l.href ? { color: "#4F2683" } : {}}
             >
               {l.label}
             </Link>
           ))}
           <Link
             href="/request-a-tutor"
-            className="text-sm font-medium bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            className="text-sm font-medium text-white px-4 py-2 rounded-lg transition-colors"
+            style={{ backgroundColor: "#4F2683" }}
+            onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#3D1A6E")}
+            onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#4F2683")}
           >
             Request a Tutor
           </Link>
@@ -45,7 +49,7 @@ export default function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden p-2 text-gray-600"
+          className="md:hidden p-2 text-gray-500"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
@@ -69,9 +73,8 @@ export default function Navbar() {
               key={l.href}
               href={l.href}
               onClick={() => setMenuOpen(false)}
-              className={`text-sm font-medium ${
-                pathname === l.href ? "text-indigo-600" : "text-gray-700"
-              }`}
+              className="text-sm font-medium text-gray-700"
+              style={pathname === l.href ? { color: "#4F2683" } : {}}
             >
               {l.label}
             </Link>
@@ -79,7 +82,8 @@ export default function Navbar() {
           <Link
             href="/request-a-tutor"
             onClick={() => setMenuOpen(false)}
-            className="text-sm font-medium bg-indigo-600 text-white px-4 py-2 rounded-lg text-center"
+            className="text-sm font-medium text-white px-4 py-2 rounded-lg text-center"
+            style={{ backgroundColor: "#4F2683" }}
           >
             Request a Tutor
           </Link>

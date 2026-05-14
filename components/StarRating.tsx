@@ -5,10 +5,10 @@ type Props = {
 };
 
 export default function StarRating({ rating, count, size = "sm" }: Props) {
-  const starSize = size === "md" ? "w-5 h-5" : "w-4 h-4";
+  const starSize = size === "md" ? "w-4 h-4" : "w-3.5 h-3.5";
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-0.5">
       {[1, 2, 3, 4, 5].map((star) => (
         <svg
           key={star}
@@ -20,8 +20,8 @@ export default function StarRating({ rating, count, size = "sm" }: Props) {
         </svg>
       ))}
       {count !== undefined && (
-        <span className="text-sm text-gray-500 ml-1">
-          {rating.toFixed(1)} ({count})
+        <span className="text-xs text-gray-400 ml-1">
+          {rating.toFixed(1)} <span className="text-gray-300">({count})</span>
         </span>
       )}
     </div>
