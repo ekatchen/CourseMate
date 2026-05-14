@@ -32,11 +32,13 @@ export default function TutorsPage() {
   const allCourses = getAllCourses();
 
   useEffect(() => {
-    setLoading(true);
-    fetchApprovedTutors(query || undefined).then((data) => {
+    async function load() {
+      setLoading(true);
+      const data = await fetchApprovedTutors(query || undefined);
       setTutors(data);
       setLoading(false);
-    });
+    }
+    load();
   }, [query]);
 
   useEffect(() => {
