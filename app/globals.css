@@ -15,14 +15,14 @@
 }
 
 body {
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
-  background-color: #F7F5FA;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  background-color: #FAFAFA;
   color: #111827;
 }
 
 /* ── Brand utilities ───────────────────────────────────────────────────────── */
-/* Background */
 @layer utilities {
+  /* Background */
   .bg-brand-50  { background-color: var(--color-brand-50);  }
   .bg-brand-100 { background-color: var(--color-brand-100); }
   .bg-brand-200 { background-color: var(--color-brand-200); }
@@ -58,18 +58,21 @@ body {
   .border-brand-800 { border-color: var(--color-brand-800); }
   .border-brand-900 { border-color: var(--color-brand-900); }
 
-  /* Border-top (for the accent cards) */
-  .border-t-brand-50  { border-top-color: var(--color-brand-50);  }
-  .border-t-brand-100 { border-top-color: var(--color-brand-100); }
-  .border-t-brand-200 { border-top-color: var(--color-brand-200); }
-  .border-t-brand-700 { border-top-color: var(--color-brand-700); }
+  /* Border-left accent */
+  .border-l-brand-700 { border-left-color: var(--color-brand-700); }
 
   /* Ring */
-  .ring-brand-50  { --tw-ring-color: var(--color-brand-50);  }
-  .ring-brand-100 { --tw-ring-color: var(--color-brand-100); }
+  .ring-brand-200 { --tw-ring-color: var(--color-brand-200); }
   .ring-brand-700 { --tw-ring-color: var(--color-brand-700); }
 
   /* Hover variants */
   .hover\:bg-brand-50:hover  { background-color: var(--color-brand-50);  }
+  .hover\:bg-brand-100:hover { background-color: var(--color-brand-100); }
   .hover\:bg-brand-800:hover { background-color: var(--color-brand-800); }
+  .hover\:text-brand-700:hover { color: var(--color-brand-700); }
+  .hover\:text-brand-800:hover { color: var(--color-brand-800); }
+
+  /* Scrollbar hide */
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 }

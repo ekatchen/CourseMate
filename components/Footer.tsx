@@ -2,20 +2,59 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-200 bg-white mt-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <footer className="bg-gray-950">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 grid sm:grid-cols-3 gap-10">
+        {/* Brand */}
         <div>
-          <span className="text-base font-bold text-brand-700">CourseMate</span>
-          <p className="text-sm text-gray-400 mt-1">Find a tutor for your exact course.</p>
+          <span className="text-base font-bold text-white tracking-tight">CourseMate</span>
+          <p className="text-sm text-gray-400 mt-3 leading-relaxed max-w-xs">
+            Peer tutoring matched to your exact course. Built for Western University students.
+          </p>
         </div>
-        <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400 justify-center">
-          <Link href="/tutors" className="hover:text-gray-700 transition-colors">Find a Tutor</Link>
-          <Link href="/become-a-tutor" className="hover:text-gray-700 transition-colors">Become a Tutor</Link>
-          <Link href="/request-a-tutor" className="hover:text-gray-700 transition-colors">Request a Tutor</Link>
-          <Link href="/how-it-works" className="hover:text-gray-700 transition-colors">How it Works</Link>
-          <Link href="/about" className="hover:text-gray-700 transition-colors">About</Link>
-        </nav>
-        <p className="text-xs text-gray-300">&copy; {new Date().getFullYear()} CourseMate</p>
+
+        {/* For students */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">
+            For Students
+          </p>
+          <nav className="flex flex-col gap-3">
+            <Link href="/tutors" className="text-sm text-gray-400 hover:text-white transition-colors">
+              Find a Tutor
+            </Link>
+            <Link href="/request-a-tutor" className="text-sm text-gray-400 hover:text-white transition-colors">
+              Request a Tutor
+            </Link>
+            <Link href="/how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors">
+              How it Works
+            </Link>
+          </nav>
+        </div>
+
+        {/* For tutors */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4">
+            For Tutors
+          </p>
+          <nav className="flex flex-col gap-3">
+            <Link href="/become-a-tutor" className="text-sm text-gray-400 hover:text-white transition-colors">
+              Apply to Tutor
+            </Link>
+            <Link href="/how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors">
+              How it Works
+            </Link>
+            <Link href="/about" className="text-sm text-gray-400 hover:text-white transition-colors">
+              About
+            </Link>
+          </nav>
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="border-t border-white/5">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+          <p className="text-xs text-gray-600">&copy; {new Date().getFullYear()} CourseMate</p>
+          <p className="text-xs text-gray-600">Western University</p>
+        </div>
       </div>
     </footer>
   );
