@@ -19,19 +19,16 @@ export default function ResetPasswordPage() {
     const code = searchParams.get("code");
 
     if (code) {
-      supabase.auth
-        .exchangeCodeForSession(code)
-        .then(({ error }: { error: Error | null }) => {
-          if (error) {
-            setError("This reset link has expired. Please request a new one.");
-          } else {
-            setReady(true);
-          }
-        });
+      supabase.auth.exchangeCodeForSession(code).then((result) => {
+        if (result.error) {
+          setError("This reset link has expired. Please request a new one.");
+        } else {
+          setReady(true);
+        }
+      });
     } else {
-      // Check if already in a recovery session
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session) {
+      supabase.auth.getSession().then((result) => {
+        if (result.data.session) {
           setReady(true);
         } else {
           setError("Invalid or expired reset link. Please request a new one.");
