@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { submitTutorApplication } from "@/lib/queries";
+import { submitTutorApplicationAction } from "./actions";
 
 type CourseEntry = { code: string; name: string; rate: string; grade: string };
 
@@ -15,7 +15,17 @@ export default function BecomeTutorPage() {
   const [integrityAgreed, setIntegrityAgreed] = useState(false);
 
   const [form, setForm] = useState({
-    name: "", email: "", program: "", year: "", bio: "",
+    name: "",
+    email: "",
+    program: "",
+    year: "",
+    bio: "",
+    teachingStyle: "",
+    sessionFormat: "" as "online" | "in_person" | "both" | "",
+    availabilityText: "",
+    calendlyUrl: "",
+    campusLocationPreference: "",
+    onlineMeetingPreference: "",
   });
 
   const [courses, setCourses] = useState<CourseEntry[]>([
@@ -42,16 +52,23 @@ export default function BecomeTutorPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!integrityAgreed) return;
+    if (!form.sessionFormat) { setServerError("Please select a session format."); return; }
+    if (!integrityAgreed) { setServerError("Please agree to the academic integrity policy."); return; }
     setSubmitting(true);
     setServerError(null);
 
-    const { error } = await submitTutorApplication({
+    const { error } = await submitTutorApplicationAction({
       display_name: form.name,
       email: form.email,
       program: form.program,
       year: form.year,
       bio: form.bio,
+      teaching_style: form.teachingStyle,
+      session_format: form.sessionFormat as "online" | "in_person" | "both",
+      availability_text: form.availabilityText,
+      calendly_url: form.calendlyUrl,
+      campus_location_preference: form.campusLocationPreference,
+      online_meeting_preference: form.onlineMeetingPreference,
       university_name: "Western University",
       academic_integrity_agreed: true,
       courses,
@@ -95,10 +112,10 @@ export default function BecomeTutorPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+
         {/* Personal info */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col gap-4">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Your info</h2>
-
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -121,7 +138,6 @@ export default function BecomeTutorPage() {
               />
             </div>
           </div>
-
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -150,7 +166,6 @@ export default function BecomeTutorPage() {
               </select>
             </div>
           </div>
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Short bio <span className="text-gray-300">*</span>{" "}
@@ -158,8 +173,93 @@ export default function BecomeTutorPage() {
             </label>
             <textarea
               required rows={3}
-              placeholder="Describe your experience with the courses you tutor. What do you focus on? How do you typically run a session?"
+              placeholder="Describe your background with these courses — what you focus on and what a session with you typically looks like."
               value={form.bio} onChange={(e) => setField("bio", e.target.value)}
+              className={inputCls}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              How do you run sessions?{" "}
+              <span className="text-gray-400 font-normal text-xs">(optional)</span>
+            </label>
+            <textarea
+              rows={2}
+              placeholder="e.g. I start by reviewing what the student found confusing, then work through practice problems together."
+              value={form.teachingStyle} onChange={(e) => setField("teachingStyle", e.target.value)}
+              className={inputCls}
+            />
+          </div>
+        </div>
+
+        {/* Session details */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col gap-4">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Session details</h2>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Session format <span className="text-gray-300">*</span>
+              </label>
+              <select
+                required value={form.sessionFormat}
+                onChange={(e) => setField("sessionFormat", e.target.value)}
+                className={inputCls}
+              >
+                <option value="" disabled>Select format</option>
+                <option value="online">Online only</option>
+                <option value="in_person">In person only</option>
+                <option value="both">Online or in person</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                General availability{" "}
+                <span className="text-gray-400 font-normal text-xs">(optional)</span>
+              </label>
+              <input
+                type="text" placeholder="e.g. Evenings and weekends"
+                value={form.availabilityText} onChange={(e) => setField("availabilityText", e.target.value)}
+                className={inputCls}
+              />
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                In-person location preference{" "}
+                <span className="text-gray-400 font-normal text-xs">(optional)</span>
+              </label>
+              <input
+                type="text" placeholder="e.g. Taylor Library, Weldon"
+                value={form.campusLocationPreference}
+                onChange={(e) => setField("campusLocationPreference", e.target.value)}
+                className={inputCls}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Online meeting preference{" "}
+                <span className="text-gray-400 font-normal text-xs">(optional)</span>
+              </label>
+              <input
+                type="text" placeholder="e.g. Zoom, Google Meet, Discord"
+                value={form.onlineMeetingPreference}
+                onChange={(e) => setField("onlineMeetingPreference", e.target.value)}
+                className={inputCls}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Calendly URL{" "}
+              <span className="text-gray-400 font-normal text-xs">(optional — lets students book directly)</span>
+            </label>
+            <input
+              type="url" placeholder="https://calendly.com/your-link"
+              value={form.calendlyUrl} onChange={(e) => setField("calendlyUrl", e.target.value)}
               className={inputCls}
             />
           </div>
@@ -169,9 +269,8 @@ export default function BecomeTutorPage() {
         <div className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col gap-4">
           <div>
             <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Courses to tutor</h2>
-            <p className="text-xs text-gray-400 mt-1">Add each course separately.</p>
+            <p className="text-xs text-gray-400 mt-1">Add each course separately. Enter the code exactly as it appears in the course calendar.</p>
           </div>
-
           {courses.map((course, i) => (
             <div key={i} className="grid sm:grid-cols-4 gap-3 items-start p-3 rounded-lg bg-brand-50">
               <div>
@@ -222,7 +321,6 @@ export default function BecomeTutorPage() {
               </div>
             </div>
           ))}
-
           <button
             type="button" onClick={addCourse}
             className="text-sm font-medium text-brand-700 hover:underline self-start"
@@ -241,10 +339,8 @@ export default function BecomeTutorPage() {
           </p>
           <label className="flex items-start gap-3 cursor-pointer">
             <input
-              type="checkbox"
-              required
-              checked={integrityAgreed}
-              onChange={(e) => setIntegrityAgreed(e.target.checked)}
+              type="checkbox" required
+              checked={integrityAgreed} onChange={(e) => setIntegrityAgreed(e.target.checked)}
               className="mt-0.5 accent-brand-700"
             />
             <span className="text-sm text-gray-700">
@@ -264,8 +360,7 @@ export default function BecomeTutorPage() {
         )}
 
         <button
-          type="submit"
-          disabled={submitting}
+          type="submit" disabled={submitting}
           className="text-white bg-brand-700 hover:bg-brand-800 disabled:opacity-60 py-3 px-6 rounded-lg font-semibold text-sm transition-colors"
         >
           {submitting ? "Submitting..." : "Submit Application"}

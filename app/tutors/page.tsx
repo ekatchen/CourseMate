@@ -8,6 +8,15 @@ import { getAverageRating } from "@/lib/data";
 import TutorCard from "@/components/TutorCard";
 import Link from "next/link";
 
+type FormatFilter = "all" | "online" | "in_person" | "both";
+
+const formatFilterLabel: Record<FormatFilter, string> = {
+  all: "All formats",
+  online: "Online",
+  in_person: "In person",
+  both: "Online or in person",
+};
+
 export default function TutorsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -16,12 +25,12 @@ export default function TutorsPage() {
   const [query, setQuery] = useState(initialCourse);
   const [input, setInput] = useState(initialCourse);
   const [sortBy, setSortBy] = useState<"rating" | "rate">("rating");
+  const [formatFilter, setFormatFilter] = useState<FormatFilter>("all");
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [loading, setLoading] = useState(true);
 
   const allCourses = getAllCourses();
 
-  // Fetch tutors whenever query changes
   useEffect(() => {
     setLoading(true);
     fetchApprovedTutors(query || undefined).then((data) => {
@@ -30,13 +39,23 @@ export default function TutorsPage() {
     });
   }, [query]);
 
-  // Sync query from URL param
   useEffect(() => {
     setQuery(initialCourse);
     setInput(initialCourse);
   }, [initialCourse]);
 
-  const sorted = [...tutors].sort((a, b) => {
+  const filtered = tutors.filter((t) => {
+    if (formatFilter === "all") return true;
+    if (!t.sessionFormat) return true; // demo tutors without format pass through
+    if (formatFilter === "both") return t.sessionFormat === "both";
+    // "online" filter: match tutors who do online or both
+    if (formatFilter === "online") return t.sessionFormat === "online" || t.sessionFormat === "both";
+    // "in_person" filter: match tutors who do in_person or both
+    if (formatFilter === "in_person") return t.sessionFormat === "in_person" || t.sessionFormat === "both";
+    return true;
+  });
+
+  const sorted = [...filtered].sort((a, b) => {
     if (sortBy === "rating") return getAverageRating(b) - getAverageRating(a);
     return (
       Math.min(...a.courses.map((c) => c.ratePerHour)) -
@@ -118,18 +137,31 @@ export default function TutorsPage() {
       </div>
 
       {/* Results bar */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
         <p className="text-xs text-gray-400">
-          {loading ? "Loading..." : `${sorted.length} tutor${sorted.length !== 1 ? "s" : ""}${query ? ` for "${query}"` : ""}`}
+          {loading
+            ? "Loading..."
+            : `${sorted.length} tutor${sorted.length !== 1 ? "s" : ""}${query ? ` for "${query}"` : ""}`}
         </p>
-        <select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as "rating" | "rate")}
-          className="text-xs border border-gray-200 rounded-md px-3 py-1.5 bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-300"
-        >
-          <option value="rating">Top rated</option>
-          <option value="rate">Lowest rate</option>
-        </select>
+        <div className="flex items-center gap-2">
+          <select
+            value={formatFilter}
+            onChange={(e) => setFormatFilter(e.target.value as FormatFilter)}
+            className="text-xs border border-gray-200 rounded-md px-3 py-1.5 bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-300"
+          >
+            {(Object.keys(formatFilterLabel) as FormatFilter[]).map((key) => (
+              <option key={key} value={key}>{formatFilterLabel[key]}</option>
+            ))}
+          </select>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as "rating" | "rate")}
+            className="text-xs border border-gray-200 rounded-md px-3 py-1.5 bg-white text-gray-600 focus:outline-none focus:ring-2 focus:ring-brand-300"
+          >
+            <option value="rating">Top rated</option>
+            <option value="rate">Lowest rate</option>
+          </select>
+        </div>
       </div>
 
       {/* Grid */}
@@ -160,17 +192,21 @@ export default function TutorsPage() {
       ) : (
         <div className="py-20 bg-white rounded-xl border border-gray-200 text-center">
           <p className="text-sm font-semibold text-gray-800 mb-1">
-            No tutors listed for &ldquo;{query}&rdquo;
+            {query ? `No tutors listed for "${query}"` : "No tutors match the selected filter."}
           </p>
           <p className="text-sm text-gray-400 mb-6">
-            Leave your details and we&apos;ll reach out when one becomes available.
+            {query
+              ? "Leave your details and we'll reach out when one becomes available."
+              : "Try a different format or clear the filter."}
           </p>
-          <Link
-            href={`/request-a-tutor?course=${encodeURIComponent(query)}`}
-            className="inline-block text-white bg-brand-700 hover:bg-brand-800 px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
-          >
-            Request a tutor for {query}
-          </Link>
+          {query && (
+            <Link
+              href={`/request-a-tutor?course=${encodeURIComponent(query)}`}
+              className="inline-block text-white bg-brand-700 hover:bg-brand-800 px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+            >
+              Request a tutor for {query}
+            </Link>
+          )}
         </div>
       )}
     </div>

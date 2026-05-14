@@ -240,3 +240,29 @@ $$;
 create or replace trigger trg_update_tutor_rating
   after insert or update or delete on reviews
   for each row execute function update_tutor_rating();
+
+-- ─── Migrations (run after initial schema) ───────────────────────────────────
+-- Safe to run multiple times. Add new columns here as the product evolves.
+
+-- tutors: availability and booking fields
+alter table tutors add column if not exists calendly_url               text;
+alter table tutors add column if not exists campus_location_preference text;
+alter table tutors add column if not exists online_meeting_preference  text;
+
+-- contact_requests: additional fields + make tutor_id nullable for demo tutors
+alter table contact_requests alter column tutor_id drop not null;
+alter table contact_requests add column if not exists tutor_name       text;
+alter table contact_requests add column if not exists preferred_format text;
+alter table contact_requests add column if not exists preferred_times  text;
+
+-- RLS policy for contact_requests public insert (if not already created)
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where tablename = 'contact_requests' and policyname = 'contact_requests_public_insert'
+  ) then
+    execute 'create policy "contact_requests_public_insert"
+      on contact_requests for insert with check (true)';
+  end if;
+end $$;

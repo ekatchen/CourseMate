@@ -1,12 +1,11 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: var(--font-geist-sans);
-
-  /* Western University purple palette */
+/* ── Brand palette ─────────────────────────────────────────────────────────── */
+:root {
   --color-brand-50:  #F4F0FA;
   --color-brand-100: #E5DBEF;
   --color-brand-200: #CDBDE3;
+  --color-brand-300: #B8A0D8;
   --color-brand-400: #9B72C8;
   --color-brand-500: #7B4FAF;
   --color-brand-600: #5C2D91;
@@ -19,4 +18,58 @@ body {
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   background-color: #F7F5FA;
   color: #111827;
+}
+
+/* ── Brand utilities ───────────────────────────────────────────────────────── */
+/* Background */
+@layer utilities {
+  .bg-brand-50  { background-color: var(--color-brand-50);  }
+  .bg-brand-100 { background-color: var(--color-brand-100); }
+  .bg-brand-200 { background-color: var(--color-brand-200); }
+  .bg-brand-300 { background-color: var(--color-brand-300); }
+  .bg-brand-400 { background-color: var(--color-brand-400); }
+  .bg-brand-500 { background-color: var(--color-brand-500); }
+  .bg-brand-600 { background-color: var(--color-brand-600); }
+  .bg-brand-700 { background-color: var(--color-brand-700); }
+  .bg-brand-800 { background-color: var(--color-brand-800); }
+  .bg-brand-900 { background-color: var(--color-brand-900); }
+
+  /* Text */
+  .text-brand-50  { color: var(--color-brand-50);  }
+  .text-brand-100 { color: var(--color-brand-100); }
+  .text-brand-200 { color: var(--color-brand-200); }
+  .text-brand-300 { color: var(--color-brand-300); }
+  .text-brand-400 { color: var(--color-brand-400); }
+  .text-brand-500 { color: var(--color-brand-500); }
+  .text-brand-600 { color: var(--color-brand-600); }
+  .text-brand-700 { color: var(--color-brand-700); }
+  .text-brand-800 { color: var(--color-brand-800); }
+  .text-brand-900 { color: var(--color-brand-900); }
+
+  /* Border */
+  .border-brand-50  { border-color: var(--color-brand-50);  }
+  .border-brand-100 { border-color: var(--color-brand-100); }
+  .border-brand-200 { border-color: var(--color-brand-200); }
+  .border-brand-300 { border-color: var(--color-brand-300); }
+  .border-brand-400 { border-color: var(--color-brand-400); }
+  .border-brand-500 { border-color: var(--color-brand-500); }
+  .border-brand-600 { border-color: var(--color-brand-600); }
+  .border-brand-700 { border-color: var(--color-brand-700); }
+  .border-brand-800 { border-color: var(--color-brand-800); }
+  .border-brand-900 { border-color: var(--color-brand-900); }
+
+  /* Border-top (for the accent cards) */
+  .border-t-brand-50  { border-top-color: var(--color-brand-50);  }
+  .border-t-brand-100 { border-top-color: var(--color-brand-100); }
+  .border-t-brand-200 { border-top-color: var(--color-brand-200); }
+  .border-t-brand-700 { border-top-color: var(--color-brand-700); }
+
+  /* Ring */
+  .ring-brand-50  { --tw-ring-color: var(--color-brand-50);  }
+  .ring-brand-100 { --tw-ring-color: var(--color-brand-100); }
+  .ring-brand-700 { --tw-ring-color: var(--color-brand-700); }
+
+  /* Hover variants */
+  .hover\:bg-brand-50:hover  { background-color: var(--color-brand-50);  }
+  .hover\:bg-brand-800:hover { background-color: var(--color-brand-800); }
 }

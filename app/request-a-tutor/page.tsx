@@ -10,7 +10,16 @@ const inputCls =
 export default function RequestTutorPage() {
   const searchParams = useSearchParams();
   const [courseCode, setCourseCode] = useState("");
-  const [form, setForm] = useState({ name: "", email: "", courseName: "", helpNeeded: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    courseName: "",
+    helpNeeded: "",
+    budget: "",
+    urgency: "" as "this_week" | "before_midterm" | "before_final" | "flexible" | "",
+    preferredFormat: "" as "online" | "in_person" | "either" | "",
+    preferredTimes: "",
+  });
   const [integrityAgreed, setIntegrityAgreed] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -27,7 +36,7 @@ export default function RequestTutorPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!integrityAgreed) return;
+    if (!integrityAgreed || !form.urgency || !form.preferredFormat) return;
     setSubmitting(true);
     setServerError(null);
 
@@ -37,6 +46,10 @@ export default function RequestTutorPage() {
       manual_course_code: courseCode,
       manual_course_name: form.courseName,
       help_needed: form.helpNeeded,
+      budget: form.budget,
+      urgency: form.urgency as "this_week" | "before_midterm" | "before_final" | "flexible",
+      preferred_format: form.preferredFormat as "online" | "in_person" | "either",
+      preferred_times: form.preferredTimes,
       academic_integrity_agreed: true,
     });
 
@@ -79,7 +92,10 @@ export default function RequestTutorPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
+        {/* Contact info */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col gap-4">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Your info</h2>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Your name <span className="text-gray-300">*</span>
@@ -100,6 +116,11 @@ export default function RequestTutorPage() {
               className={inputCls}
             />
           </div>
+        </div>
+
+        {/* Course info */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col gap-4">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Course</h2>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Course code <span className="text-gray-300">*</span>
@@ -128,10 +149,76 @@ export default function RequestTutorPage() {
             </label>
             <textarea
               rows={3}
-              placeholder="e.g. I have a midterm in two weeks and need help with a specific topic"
+              placeholder="e.g. Struggling with a specific topic before midterms"
               value={form.helpNeeded} onChange={(e) => setField("helpNeeded", e.target.value)}
               className={inputCls}
             />
+          </div>
+        </div>
+
+        {/* Preferences */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col gap-4">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400">Preferences</h2>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                When do you need help? <span className="text-gray-300">*</span>
+              </label>
+              <select
+                required
+                value={form.urgency}
+                onChange={(e) => setField("urgency", e.target.value)}
+                className={inputCls}
+              >
+                <option value="" disabled>Select timeline</option>
+                <option value="this_week">This week</option>
+                <option value="before_midterm">Before midterm</option>
+                <option value="before_final">Before final</option>
+                <option value="flexible">Flexible</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Session format <span className="text-gray-300">*</span>
+              </label>
+              <select
+                required
+                value={form.preferredFormat}
+                onChange={(e) => setField("preferredFormat", e.target.value)}
+                className={inputCls}
+              >
+                <option value="" disabled>Select format</option>
+                <option value="online">Online</option>
+                <option value="in_person">In person</option>
+                <option value="either">Either works</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Budget per hour ($){" "}
+                <span className="text-gray-400 font-normal text-xs">(optional)</span>
+              </label>
+              <input
+                type="number" placeholder="e.g. 25" min="5" max="200"
+                value={form.budget} onChange={(e) => setField("budget", e.target.value)}
+                className={inputCls}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Availability{" "}
+                <span className="text-gray-400 font-normal text-xs">(optional)</span>
+              </label>
+              <input
+                type="text" placeholder="e.g. Weekday evenings"
+                value={form.preferredTimes} onChange={(e) => setField("preferredTimes", e.target.value)}
+                className={inputCls}
+              />
+            </div>
           </div>
         </div>
 

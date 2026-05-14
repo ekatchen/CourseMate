@@ -22,15 +22,15 @@ export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="bg-white border-b border-gray-100">
+      <section className="bg-brand-700">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-5">
+          <p className="text-xs font-semibold uppercase tracking-widest text-brand-300 mb-5">
             Course-specific peer tutoring
           </p>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 leading-tight tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white leading-tight tracking-tight">
             Find a tutor for your exact course.
           </h1>
-          <p className="mt-5 text-base sm:text-lg text-gray-500 max-w-xl mx-auto leading-relaxed">
+          <p className="mt-5 text-base sm:text-lg text-brand-200 max-w-xl mx-auto leading-relaxed">
             Browse peer tutors by course code, compare rates, and request help when no tutor is listed yet.
           </p>
 
@@ -40,11 +40,11 @@ export default function HomePage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Course code — e.g. Calc 1000, CS 1026"
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-transparent"
+              className="flex-1 rounded-lg px-4 py-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-white/50 text-gray-900 placeholder-gray-400 border-0"
             />
             <button
               type="submit"
-              className="text-white bg-brand-700 hover:bg-brand-800 px-5 py-3 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap"
+              className="bg-white text-brand-700 hover:bg-brand-50 px-5 py-3 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap"
             >
               Find a Tutor
             </button>
@@ -55,7 +55,7 @@ export default function HomePage() {
               <button
                 key={c}
                 onClick={() => router.push(`/tutors?course=${encodeURIComponent(c)}`)}
-                className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-500 px-3 py-1.5 rounded-md transition-colors"
+                className="text-xs bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3 py-1.5 rounded-md transition-colors"
               >
                 {c}
               </button>
@@ -66,8 +66,8 @@ export default function HomePage() {
 
       {/* Value props */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 grid sm:grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">For students</p>
+        <div className="bg-white rounded-xl border border-gray-200 p-6 border-t-[3px] border-t-brand-700">
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600 mb-3">For students</p>
           <h2 className="text-base font-bold text-gray-900 mb-2">
             Find someone who already took your course.
           </h2>
@@ -75,8 +75,8 @@ export default function HomePage() {
             Search by course code and find a tutor familiar with the structure, pace, and expectations of the class.
           </p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">For tutors</p>
+        <div className="bg-white rounded-xl border border-gray-200 p-6 border-t-[3px] border-t-brand-700">
+          <p className="text-xs font-semibold uppercase tracking-wider text-brand-600 mb-3">For tutors</p>
           <h2 className="text-base font-bold text-gray-900 mb-2">
             Tutor courses you already know well.
           </h2>
@@ -107,11 +107,11 @@ export default function HomePage() {
               {
                 step: "03",
                 title: "Contact directly",
-                desc: "Message your tutor to set up a session. No platform fees or scheduling system.",
+                desc: "Send a request and your tutor will follow up to set up a session.",
               },
             ].map((item) => (
               <div key={item.step}>
-                <p className="text-2xl font-bold text-brand-700 opacity-25 mb-3">{item.step}</p>
+                <p className="text-2xl font-bold text-brand-600 opacity-40 mb-3">{item.step}</p>
                 <h3 className="font-semibold text-gray-900 mb-2 text-sm">{item.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
               </div>

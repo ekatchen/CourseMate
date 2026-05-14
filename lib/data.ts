@@ -23,6 +23,13 @@ export type Tutor = {
   courses: TutorCourse[];
   reviews: Review[];
   status: "approved" | "pending";
+  // Optional fields — populated from Supabase; undefined for static demo tutors
+  sessionFormat?: "online" | "in_person" | "both";
+  availabilityText?: string;
+  teachingStyle?: string;
+  calendlyUrl?: string;
+  campusLocationPreference?: string;
+  onlineMeetingPreference?: string;
 };
 
 export const tutors: Tutor[] = [

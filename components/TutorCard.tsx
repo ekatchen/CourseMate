@@ -8,6 +8,12 @@ type Props = {
   highlightCourse?: string;
 };
 
+const sessionFormatLabel: Record<string, string> = {
+  online: "Online",
+  in_person: "In person",
+  both: "Online or in person",
+};
+
 export default function TutorCard({ tutor, highlightCourse }: Props) {
   const avg = getAverageRating(tutor);
   const lowestRate = getLowestRate(tutor);
@@ -44,6 +50,11 @@ export default function TutorCard({ tutor, highlightCourse }: Props) {
               From ${lowestRate}
               <span className="font-normal text-gray-400 text-xs">/hr</span>
             </p>
+            {tutor.sessionFormat && (
+              <p className="text-xs text-gray-400 mt-1">
+                {sessionFormatLabel[tutor.sessionFormat] ?? tutor.sessionFormat}
+              </p>
+            )}
           </div>
         </div>
 

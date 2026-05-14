@@ -1,11 +1,38 @@
 "use server";
 
-import { approveTutor, rejectTutor, approveReview } from "@/lib/queries";
+import {
+  approveTutor,
+  rejectTutor,
+  approveReview,
+  markRequestMatched,
+  markRequestClosed,
+  closeContactRequest,
+} from "@/lib/queries";
+import { supabaseAdmin } from "@/lib/supabaseClient";
+import { sendApprovalNotification } from "@/lib/email";
 import { revalidatePath } from "next/cache";
 
 export async function handleApproveTutor(formData: FormData) {
   const id = formData.get("id") as string;
   await approveTutor(id);
+
+  // Send approval email (fire-and-forget)
+  if (supabaseAdmin) {
+    supabaseAdmin
+      .from("tutors")
+      .select("email, display_name")
+      .eq("id", id)
+      .single()
+      .then(({ data }) => {
+        if (data?.email) {
+          sendApprovalNotification({
+            tutorEmail: data.email,
+            tutorName: data.display_name,
+          }).catch(console.error);
+        }
+      });
+  }
+
   revalidatePath("/admin");
 }
 
@@ -18,5 +45,23 @@ export async function handleRejectTutor(formData: FormData) {
 export async function handleApproveReview(formData: FormData) {
   const id = formData.get("id") as string;
   await approveReview(id);
+  revalidatePath("/admin");
+}
+
+export async function handleMarkMatched(formData: FormData) {
+  const id = formData.get("id") as string;
+  await markRequestMatched(id);
+  revalidatePath("/admin");
+}
+
+export async function handleMarkClosed(formData: FormData) {
+  const id = formData.get("id") as string;
+  await markRequestClosed(id);
+  revalidatePath("/admin");
+}
+
+export async function handleCloseContact(formData: FormData) {
+  const id = formData.get("id") as string;
+  await closeContactRequest(id);
   revalidatePath("/admin");
 }

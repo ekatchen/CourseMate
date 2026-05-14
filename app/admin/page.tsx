@@ -1,8 +1,37 @@
-import { fetchPendingTutors, fetchStudentRequests, fetchPendingReviews } from "@/lib/queries";
+import { fetchPendingTutors, fetchStudentRequests, fetchPendingReviews, fetchContactRequests } from "@/lib/queries";
 import { isSupabaseConfigured } from "@/lib/supabaseClient";
-import { handleApproveTutor, handleRejectTutor, handleApproveReview } from "./actions";
+import {
+  handleApproveTutor,
+  handleRejectTutor,
+  handleApproveReview,
+  handleMarkMatched,
+  handleMarkClosed,
+  handleCloseContact,
+} from "./actions";
 
 export const dynamic = "force-dynamic";
+
+const urgencyLabel: Record<string, string> = {
+  this_week: "This week",
+  before_midterm: "Before midterm",
+  before_final: "Before final",
+  flexible: "Flexible",
+};
+
+const formatLabel: Record<string, string> = {
+  online: "Online",
+  in_person: "In person",
+  either: "Either",
+  both: "Online or in person",
+};
+
+const statusColors: Record<string, string> = {
+  new: "bg-brand-50 text-brand-700",
+  matched: "bg-green-50 text-green-700",
+  closed: "bg-gray-100 text-gray-400",
+  sent: "bg-blue-50 text-blue-600",
+  responded: "bg-green-50 text-green-700",
+};
 
 export default async function AdminPage() {
   if (!isSupabaseConfigured) {
@@ -22,9 +51,10 @@ export default async function AdminPage() {
     );
   }
 
-  const [pendingTutors, studentRequests, pendingReviews] = await Promise.all([
+  const [pendingTutors, studentRequests, contactRequests, pendingReviews] = await Promise.all([
     fetchPendingTutors(),
     fetchStudentRequests(),
+    fetchContactRequests(),
     fetchPendingReviews(),
   ]);
 
@@ -33,10 +63,10 @@ export default async function AdminPage() {
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-sm text-gray-400 mt-1">Review tutor applications, student requests, and pending reviews.</p>
+          <p className="text-sm text-gray-400 mt-1">Review tutor applications, student requests, contact requests, and pending reviews.</p>
         </div>
-        <span className="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1.5 rounded-lg">
-          No auth — protect this route before going to production
+        <span className="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-1.5 rounded-lg flex-shrink-0">
+          Protect this route before going to production
         </span>
       </div>
 
@@ -52,12 +82,16 @@ export default async function AdminPage() {
             {pendingTutors.map((t: any) => (
               <div key={t.id} className="bg-white rounded-xl border border-gray-200 p-5">
                 <div className="flex items-start justify-between gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-semibold text-gray-900 text-sm">{t.display_name}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{t.email} &middot; {t.program} &middot; {t.year}</p>
-                    {t.bio && (
-                      <p className="text-sm text-gray-500 mt-2 leading-relaxed max-w-xl">{t.bio}</p>
-                    )}
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {t.email} &middot; {t.program} &middot; {t.year}
+                      {t.session_format && <> &middot; {formatLabel[t.session_format] ?? t.session_format}</>}
+                    </p>
+                    {t.bio && <p className="text-sm text-gray-500 mt-2 leading-relaxed max-w-xl">{t.bio}</p>}
+                    {t.teaching_style && <p className="text-xs text-gray-400 mt-1 italic max-w-xl">{t.teaching_style}</p>}
+                    {t.availability_text && <p className="text-xs text-gray-400 mt-1">Available: {t.availability_text}</p>}
+                    {t.calendly_url && <p className="text-xs text-gray-400 mt-1">Calendly: {t.calendly_url}</p>}
                     {t.tutor_courses?.length > 0 && (
                       <div className="flex flex-wrap gap-1.5 mt-3">
                         {t.tutor_courses.map((c: any) => (
@@ -72,19 +106,13 @@ export default async function AdminPage() {
                   <div className="flex gap-2 flex-shrink-0">
                     <form action={handleApproveTutor}>
                       <input type="hidden" name="id" value={t.id} />
-                      <button
-                        type="submit"
-                        className="text-xs font-semibold text-white bg-brand-700 hover:bg-brand-800 px-3 py-1.5 rounded-lg transition-colors"
-                      >
+                      <button type="submit" className="text-xs font-semibold text-white bg-brand-700 hover:bg-brand-800 px-3 py-1.5 rounded-lg transition-colors">
                         Approve
                       </button>
                     </form>
                     <form action={handleRejectTutor}>
                       <input type="hidden" name="id" value={t.id} />
-                      <button
-                        type="submit"
-                        className="text-xs font-semibold text-gray-500 border border-gray-200 hover:bg-gray-50 px-3 py-1.5 rounded-lg transition-colors"
-                      >
+                      <button type="submit" className="text-xs font-semibold text-gray-500 border border-gray-200 hover:bg-gray-50 px-3 py-1.5 rounded-lg transition-colors">
                         Reject
                       </button>
                     </form>
@@ -108,23 +136,94 @@ export default async function AdminPage() {
             {studentRequests.map((r: any) => (
               <div key={r.id} className="bg-white rounded-xl border border-gray-200 p-5">
                 <div className="flex items-start justify-between gap-4">
-                  <div>
+                  <div className="min-w-0">
                     <p className="font-semibold text-gray-900 text-sm">{r.manual_course_code}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      {r.student_name} &middot; {r.student_email}
-                    </p>
-                    {r.help_needed && (
-                      <p className="text-sm text-gray-500 mt-2 max-w-xl">{r.help_needed}</p>
-                    )}
+                    <p className="text-xs text-gray-400 mt-0.5">{r.student_name} &middot; {r.student_email}</p>
+                    <div className="flex flex-wrap gap-2 mt-1.5">
+                      {r.urgency && (
+                        <span className="text-xs text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded">
+                          {urgencyLabel[r.urgency] ?? r.urgency}
+                        </span>
+                      )}
+                      {r.preferred_format && (
+                        <span className="text-xs text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded">
+                          {formatLabel[r.preferred_format] ?? r.preferred_format}
+                        </span>
+                      )}
+                      {r.budget && (
+                        <span className="text-xs text-gray-400 bg-gray-50 border border-gray-100 px-2 py-0.5 rounded">
+                          Budget: ${r.budget}/hr
+                        </span>
+                      )}
+                    </div>
+                    {r.help_needed && <p className="text-sm text-gray-500 mt-2 max-w-xl">{r.help_needed}</p>}
                     <p className="text-xs text-gray-300 mt-2">{new Date(r.created_at).toLocaleDateString()}</p>
                   </div>
-                  <span className={`text-xs px-2 py-0.5 rounded font-medium flex-shrink-0 ${
-                    r.status === "new"
-                      ? "bg-brand-50 text-brand-700"
-                      : "bg-gray-100 text-gray-400"
-                  }`}>
-                    {r.status}
-                  </span>
+                  <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                    <span className={`text-xs px-2 py-0.5 rounded font-medium ${statusColors[r.status] ?? "bg-gray-100 text-gray-400"}`}>
+                      {r.status}
+                    </span>
+                    {r.status === "new" && (
+                      <form action={handleMarkMatched}>
+                        <input type="hidden" name="id" value={r.id} />
+                        <button type="submit" className="text-xs font-semibold text-gray-500 border border-gray-200 hover:bg-gray-50 px-3 py-1.5 rounded-lg transition-colors">
+                          Mark matched
+                        </button>
+                      </form>
+                    )}
+                    {r.status !== "closed" && (
+                      <form action={handleMarkClosed}>
+                        <input type="hidden" name="id" value={r.id} />
+                        <button type="submit" className="text-xs text-gray-300 hover:text-gray-500 px-2 py-1 transition-colors">
+                          Close
+                        </button>
+                      </form>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Contact requests */}
+      <section className="mb-10">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">
+          Contact requests ({contactRequests.length})
+        </h2>
+        {contactRequests.length === 0 ? (
+          <p className="text-sm text-gray-400 bg-white rounded-xl border border-gray-200 p-5">No contact requests yet.</p>
+        ) : (
+          <div className="flex flex-col gap-3">
+            {contactRequests.map((c: any) => (
+              <div key={c.id} className="bg-white rounded-xl border border-gray-200 p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-gray-900 text-sm">
+                      {c.student_name} &rarr; {c.tutor_name ?? "Unknown tutor"}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {c.student_email} &middot; {c.manual_course_code}
+                      {c.preferred_format && <> &middot; {formatLabel[c.preferred_format] ?? c.preferred_format}</>}
+                    </p>
+                    {c.preferred_times && <p className="text-xs text-gray-400 mt-1">Available: {c.preferred_times}</p>}
+                    {c.message && <p className="text-sm text-gray-500 mt-2 max-w-xl">{c.message}</p>}
+                    <p className="text-xs text-gray-300 mt-2">{new Date(c.created_at).toLocaleDateString()}</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                    <span className={`text-xs px-2 py-0.5 rounded font-medium ${statusColors[c.status] ?? "bg-gray-100 text-gray-400"}`}>
+                      {c.status}
+                    </span>
+                    {c.status !== "closed" && (
+                      <form action={handleCloseContact}>
+                        <input type="hidden" name="id" value={c.id} />
+                        <button type="submit" className="text-xs text-gray-300 hover:text-gray-500 px-2 py-1 transition-colors">
+                          Close
+                        </button>
+                      </form>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -153,10 +252,7 @@ export default async function AdminPage() {
                   </div>
                   <form action={handleApproveReview}>
                     <input type="hidden" name="id" value={r.id} />
-                    <button
-                      type="submit"
-                      className="text-xs font-semibold text-white bg-brand-700 hover:bg-brand-800 px-3 py-1.5 rounded-lg transition-colors flex-shrink-0"
-                    >
+                    <button type="submit" className="text-xs font-semibold text-white bg-brand-700 hover:bg-brand-800 px-3 py-1.5 rounded-lg transition-colors flex-shrink-0">
                       Approve
                     </button>
                   </form>

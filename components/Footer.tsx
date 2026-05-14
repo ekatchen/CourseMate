@@ -8,10 +8,12 @@ export default function Footer() {
           <span className="text-base font-bold text-brand-700">CourseMate</span>
           <p className="text-sm text-gray-400 mt-1">Find a tutor for your exact course.</p>
         </div>
-        <nav className="flex gap-6 text-sm text-gray-400">
+        <nav className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-400 justify-center">
           <Link href="/tutors" className="hover:text-gray-700 transition-colors">Find a Tutor</Link>
           <Link href="/become-a-tutor" className="hover:text-gray-700 transition-colors">Become a Tutor</Link>
           <Link href="/request-a-tutor" className="hover:text-gray-700 transition-colors">Request a Tutor</Link>
+          <Link href="/how-it-works" className="hover:text-gray-700 transition-colors">How it Works</Link>
+          <Link href="/about" className="hover:text-gray-700 transition-colors">About</Link>
         </nav>
         <p className="text-xs text-gray-300">&copy; {new Date().getFullYear()} CourseMate</p>
       </div>
