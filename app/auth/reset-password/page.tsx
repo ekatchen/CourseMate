@@ -15,26 +15,27 @@ export default function ResetPasswordPage() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const supabase = createSupabaseBrowser();
-    const code = searchParams.get("code");
+    async function init() {
+      const supabase = createSupabaseBrowser();
+      const code = searchParams.get("code");
 
-    if (code) {
-      supabase.auth.exchangeCodeForSession(code).then((result) => {
-        if (result.error) {
+      if (code) {
+        const { error: exchError } = await supabase.auth.exchangeCodeForSession(code);
+        if (exchError) {
           setError("This reset link has expired. Please request a new one.");
         } else {
           setReady(true);
         }
-      });
-    } else {
-      supabase.auth.getSession().then((result) => {
-        if (result.data.session) {
+      } else {
+        const { data } = await supabase.auth.getSession();
+        if (data.session) {
           setReady(true);
         } else {
           setError("Invalid or expired reset link. Please request a new one.");
         }
-      });
+      }
     }
+    init();
   }, [searchParams]);
 
   async function handleSubmit(e: React.FormEvent) {
