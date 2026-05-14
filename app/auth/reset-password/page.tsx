@@ -21,7 +21,7 @@ export default function ResetPasswordPage() {
     if (code) {
       supabase.auth
         .exchangeCodeForSession(code)
-        .then(({ error }) => {
+        .then(({ error }: { error: Error | null }) => {
           if (error) {
             setError("This reset link has expired. Please request a new one.");
           } else {
